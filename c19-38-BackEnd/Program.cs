@@ -1,5 +1,9 @@
+using c19_38_BackEnd.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text;
 namespace c19_38_BackEnd
 {
     public class Program
@@ -23,6 +27,8 @@ namespace c19_38_BackEnd
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
+
+            
 
             //Cors generico (temporalmente) para el consumo en el front, proximamente se reconfigurara especificamente para el proyecto en despliegue de Angular
             builder.Services.AddCors(corsConfiguration =>
@@ -51,6 +57,28 @@ namespace c19_38_BackEnd
                 swaggerConfiguration.IncludeXmlComments(xmlPath);
             });
 
+
+            var bindJwtSettings = new JwtSettings();
+            //Obtiene la configuracion almacenada en appSettings.json de la key "JwtSettings":
+            builder.Configuration.Bind("JwtSettings", bindJwtSettings);
+
+            var key = Encoding.UTF8.GetBytes(bindJwtSettings.IssuerSigningKey);
+
+            //Añado la validacion del token jwt para cada request
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(config =>
+                {
+                    config.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = bindJwtSettings.ValidateIssuerSigningKey,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = bindJwtSettings.ValidateIssuer,
+                        ValidateAudience = bindJwtSettings.ValidateAudience,
+                        RequireExpirationTime = bindJwtSettings.RequiredExpirationTime,
+                        ValidateLifetime = bindJwtSettings.ValidateLifeTime
+                    };
+                });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -63,8 +91,9 @@ namespace c19_38_BackEnd
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseCors("Cors policy for Front End Angular");
             app.UseHttpsRedirection();
-
+            //app.UseAuthentication();
             app.UseAuthorization();
 
 
