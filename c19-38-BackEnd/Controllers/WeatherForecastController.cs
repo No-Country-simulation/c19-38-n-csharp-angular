@@ -30,7 +30,7 @@ namespace c19_38_BackEnd.Controllers
 
         [ProducesResponseType(typeof(IEnumerable<WeatherForecast>),200)]
         [ProducesResponseType(500)]
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet("GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
