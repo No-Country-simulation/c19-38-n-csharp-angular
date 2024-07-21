@@ -42,7 +42,11 @@ namespace c19_38_BackEnd
 
             builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
             {
-
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<DefaultContext>();
 
             builder.Services.AddScoped<UserManager<Usuario>>();
@@ -64,10 +68,17 @@ namespace c19_38_BackEnd
             //Obtiene la configuracion almacenada en appSettings.json de la key "JwtSettings":
             builder.Configuration.Bind("JwtSettings", bindJwtSettings);
 
+
+            builder.Services.AddSingleton(bindJwtSettings);
+
             var key = Encoding.UTF8.GetBytes(bindJwtSettings.IssuerSigningKey);
 
             //Añado la validacion del token jwt para cada request
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            builder.Services.AddAuthentication(options=>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(config =>
                 {
                     config.TokenValidationParameters = new TokenValidationParameters
@@ -80,6 +91,11 @@ namespace c19_38_BackEnd
                         ValidateLifetime = bindJwtSettings.ValidateLifeTime
                     };
                 });
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Atleta", policy => policy.RequireRole("Atleta"));
+                options.AddPolicy("Entrenador", policy => policy.RequireRole("Entrenador"));
+            });
 
             builder.Services.AddSwaggerGen(swaggerConfiguration=>
             {
@@ -138,7 +154,7 @@ namespace c19_38_BackEnd
 
             app.UseCors("Cors policy for Front End Angular");
             app.UseHttpsRedirection();
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
