@@ -14,5 +14,6 @@ namespace c19_38_BackEnd.Dtos
         public DateTime FechaNacimiento { get; set; }
         public Genero Genero { get; set; }
         public Disciplina Disciplina { get; set; }
+        public bool EsEntrenador {  get; set; }
     }
 }

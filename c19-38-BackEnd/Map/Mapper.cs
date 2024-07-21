@@ -6,6 +6,25 @@ namespace c19_38_BackEnd.Map
 {
     public static class Mapper
     {
+
+        // Model: RegistroDTO
+        public static Usuario MapRegistroDtoToUsuario(this RegistroDto registroDto)
+        {
+            return new Usuario
+            {
+                Nombre = registroDto.Nombre,
+                Apellido = registroDto.Apellido,
+                Altura = registroDto.Altura,
+                Peso = registroDto.Peso,
+                FechaDeNac = registroDto.FechaNacimiento,
+                Disciplina = registroDto.Disciplina,
+                Genero = registroDto.Genero,
+                Email = registroDto.Email,
+                UserName = registroDto.Nombre,
+            };
+        }
+
+
         //  Model: USUARIO
         public static UsuarioDto MapUsuarioToUsuarioDto(this Usuario usuario)
         {
