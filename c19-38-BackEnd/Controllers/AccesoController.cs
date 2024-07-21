@@ -1,5 +1,6 @@
 ﻿using c19_38_BackEnd.Configuracion;
 using c19_38_BackEnd.Dtos;
+using c19_38_BackEnd.Map;
 using c19_38_BackEnd.Modelos;
 using c19_38_BackEnd.Servicios;
 using Microsoft.AspNetCore.Authorization;
@@ -30,18 +31,7 @@ namespace c19_38_BackEnd.Controllers
         [HttpPost("Registro")]
         public async Task<IActionResult> Registro([FromBody] RegistroDto registroDto)
         {
-            var user = new Usuario
-            {
-                Nombre = registroDto.Nombre,
-                Apellido = registroDto.Apellido,
-                Altura = registroDto.Altura,
-                Peso = registroDto.Peso,
-                FechaDeNac = registroDto.FechaNacimiento,
-                Disciplina = registroDto.Disciplina,
-                Genero = registroDto.Genero,
-                Email = registroDto.Email,
-                UserName = registroDto.Nombre,
-            };
+            var user = Mapper.MapRegistroDtoToUsuario(registroDto);
             var result = await _userManager.CreateAsync(user, registroDto.Contraseña);
             if (!result.Succeeded)
             {
