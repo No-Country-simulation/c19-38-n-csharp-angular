@@ -1,6 +1,8 @@
 using c19_38_BackEnd.Configuracion;
 using c19_38_BackEnd.Datos;
+using c19_38_BackEnd.Interfaces;
 using c19_38_BackEnd.Modelos;
+using c19_38_BackEnd.Repositorio;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -27,8 +29,7 @@ namespace c19_38_BackEnd
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            
-
+ 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -39,7 +40,7 @@ namespace c19_38_BackEnd
                 configuration.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
             });
 
-
+            // Configurar Identity para el manejo de usuarios y roles, tambien se configura para los requerimientos de la contraseña
             builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
             {
                 options.Password.RequireLowercase = false;
@@ -49,6 +50,7 @@ namespace c19_38_BackEnd
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<DefaultContext>();
 
+            // Añadir servicios Scoped para el manejo de usuarios, inicio de sesión y roles.
             builder.Services.AddScoped<UserManager<Usuario>>();
             builder.Services.AddScoped<SignInManager<Usuario>>();
             builder.Services.AddScoped<RoleManager<IdentityRole<int>>>();
@@ -64,6 +66,7 @@ namespace c19_38_BackEnd
                 });
             });
 
+            // Configurar JWT settings.
             var bindJwtSettings = new JwtSettings();
             //Obtiene la configuracion almacenada en appSettings.json de la key "JwtSettings":
             builder.Configuration.Bind("JwtSettings", bindJwtSettings);
@@ -91,12 +94,15 @@ namespace c19_38_BackEnd
                         ValidateLifetime = bindJwtSettings.ValidateLifeTime
                     };
                 });
+
+            // Configurar políticas de autorización.
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Atleta", policy => policy.RequireRole("Atleta"));
                 options.AddPolicy("Entrenador", policy => policy.RequireRole("Entrenador"));
             });
 
+            // Configurar Swagger para la documentación de la API.
             builder.Services.AddSwaggerGen(swaggerConfiguration=>
             {
                 //Encabezado de la API
@@ -137,8 +143,14 @@ namespace c19_38_BackEnd
                 swaggerConfiguration.IncludeXmlComments(xmlPath);
             });
 
+            // Añadir validaciones con FluentValidation.
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             builder.Services.AddFluentValidationAutoValidation();
+
+            //Añadiendo repositorio al contenedor de servicios
+
+            //Este es un ejemplo de como se añadiria un repositorio generico para la entidad Usuario
+            builder.Services.AddScoped<IRepository<Usuario>, Repository<Usuario>>();
 
             var app = builder.Build();
 
