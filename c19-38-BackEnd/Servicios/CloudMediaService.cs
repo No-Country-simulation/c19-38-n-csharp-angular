@@ -56,7 +56,7 @@ namespace c19_38_BackEnd.Servicios
                 var uploadResult = await _cloudinary.UploadAsync(uploadParams);
                 return uploadResult.Url.ToString();
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }

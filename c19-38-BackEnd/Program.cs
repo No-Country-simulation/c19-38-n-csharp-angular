@@ -24,7 +24,7 @@ namespace c19_38_BackEnd
         //Contraseña Somee: sNvsd9t=SV}hV!L
 
 
-        public static void Main(string[] args)
+        public static async void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -95,8 +95,8 @@ namespace c19_38_BackEnd
             // Configurar políticas de autorización.
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Atleta", policy => policy.RequireRole("Atleta"));
-                options.AddPolicy("Entrenador", policy => policy.RequireRole("Entrenador"));
+                options.AddPolicy(Roles.Atleta, policy => policy.RequireRole(Roles.Atleta));
+                options.AddPolicy(Roles.Entrenador, policy => policy.RequireRole(Roles.Entrenador));
             });
 
             // Configurar Swagger para la documentación de la API.
@@ -157,6 +157,9 @@ namespace c19_38_BackEnd
             builder.Services.AddSingleton(bindJwtSettings);
             builder.Services.AddSingleton(cloudSettings);
 
+            
+            
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -165,6 +168,9 @@ namespace c19_38_BackEnd
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            //Crea los roles en caso de que no existan
+            await CrearRoles(app);
 
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -178,6 +184,26 @@ namespace c19_38_BackEnd
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static async Task CrearRoles(WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                string[] roles = { Roles.Entrenador, Roles.Atleta };
+                IdentityResult roleResult;
+
+                foreach (var rol in roles)
+                {
+                    var roleExist = await roleManager.RoleExistsAsync(rol);
+                    if (!roleExist)
+                    {
+                        // Crear los roles y guardarlos en la base de datos
+                        roleResult = await roleManager.CreateAsync(new IdentityRole(rol));
+                    }
+                }
+            }
         }
     }
 }
