@@ -1,6 +1,8 @@
 using c19_38_BackEnd.Configuracion;
 using c19_38_BackEnd.Datos;
+using c19_38_BackEnd.Interfaces;
 using c19_38_BackEnd.Modelos;
+using c19_38_BackEnd.Repositorio;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -27,8 +29,7 @@ namespace c19_38_BackEnd
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            
-
+ 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -145,6 +146,11 @@ namespace c19_38_BackEnd
             // Añadir validaciones con FluentValidation.
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             builder.Services.AddFluentValidationAutoValidation();
+
+            //Añadiendo repositorio al contenedor de servicios
+
+            //Este es un ejemplo de como se añadiria un repositorio generico para la entidad Usuario
+            builder.Services.AddScoped<IRepository<Usuario>, Repository<Usuario>>();
 
             var app = builder.Build();
 

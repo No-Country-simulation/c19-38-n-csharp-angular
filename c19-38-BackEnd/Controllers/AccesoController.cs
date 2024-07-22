@@ -1,5 +1,6 @@
 ﻿using c19_38_BackEnd.Configuracion;
 using c19_38_BackEnd.Dtos;
+using c19_38_BackEnd.Interfaces;
 using c19_38_BackEnd.Map;
 using c19_38_BackEnd.Modelos;
 using c19_38_BackEnd.Servicios;
@@ -18,14 +19,16 @@ namespace c19_38_BackEnd.Controllers
         private readonly SignInManager<Usuario> _signInManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly JwtSettings _settings;
+        private readonly IRepository<Usuario> _repository;
 
         public AccesoController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager,
-            RoleManager<IdentityRole<int>> roleManager,JwtSettings settings)
+            RoleManager<IdentityRole<int>> roleManager,JwtSettings settings,IRepository<Usuario> repository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _settings = settings;
+            _repository = repository;
         }
 
         /// <summary>
