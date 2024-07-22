@@ -39,7 +39,7 @@ namespace c19_38_BackEnd
                 configuration.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
             });
 
-
+            // Configurar Identity para el manejo de usuarios y roles, tambien se configura para los requerimientos de la contraseña
             builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
             {
                 options.Password.RequireLowercase = false;
@@ -49,6 +49,7 @@ namespace c19_38_BackEnd
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<DefaultContext>();
 
+            // Añadir servicios Scoped para el manejo de usuarios, inicio de sesión y roles.
             builder.Services.AddScoped<UserManager<Usuario>>();
             builder.Services.AddScoped<SignInManager<Usuario>>();
             builder.Services.AddScoped<RoleManager<IdentityRole<int>>>();
@@ -64,6 +65,7 @@ namespace c19_38_BackEnd
                 });
             });
 
+            // Configurar JWT settings.
             var bindJwtSettings = new JwtSettings();
             //Obtiene la configuracion almacenada en appSettings.json de la key "JwtSettings":
             builder.Configuration.Bind("JwtSettings", bindJwtSettings);
@@ -91,12 +93,15 @@ namespace c19_38_BackEnd
                         ValidateLifetime = bindJwtSettings.ValidateLifeTime
                     };
                 });
+
+            // Configurar políticas de autorización.
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Atleta", policy => policy.RequireRole("Atleta"));
                 options.AddPolicy("Entrenador", policy => policy.RequireRole("Entrenador"));
             });
 
+            // Configurar Swagger para la documentación de la API.
             builder.Services.AddSwaggerGen(swaggerConfiguration=>
             {
                 //Encabezado de la API
@@ -137,6 +142,7 @@ namespace c19_38_BackEnd
                 swaggerConfiguration.IncludeXmlComments(xmlPath);
             });
 
+            // Añadir validaciones con FluentValidation.
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             builder.Services.AddFluentValidationAutoValidation();
 
