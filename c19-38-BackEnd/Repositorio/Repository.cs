@@ -25,23 +25,29 @@ namespace c19_38_BackEnd.Repositorio
             Entities.Remove(entidadABorrar);
         }
 
-        public ICollection<T> GetAll()
-        {
-            return Entities.ToList();
-        }
-
         public async Task<T?> GetByIdAsync(int id)
         {
             return await Entities.FindAsync(id);
         }
 
-        public void Update(T entity)
-        {
-            Entities.Update(entity);
-        }
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<T>> GetAllAsync()
+        {
+            return await _context.Set<T>().ToListAsync();
+        }
+
+        public async Task EditAsync(T entity, int id)
+        {
+            var existEntity = await _context.Set<T>().FindAsync(id);
+            if (existEntity != null)
+            {
+                _context.Entry(existEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

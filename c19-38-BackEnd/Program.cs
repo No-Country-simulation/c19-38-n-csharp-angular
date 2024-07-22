@@ -54,6 +54,14 @@ namespace c19_38_BackEnd
             builder.Services.AddScoped<UserManager<Usuario>>();
             builder.Services.AddScoped<SignInManager<Usuario>>();
             builder.Services.AddScoped<RoleManager<IdentityRole<int>>>();
+            builder.Services.AddScoped<IRepository<Serie>,Repository<Serie>>();
+            builder.Services.AddScoped<IRepository<Ejercicio>, Repository<Ejercicio>>();
+            builder.Services.AddScoped<IRepository<Usuario>, Repository<Usuario>>();
+            builder.Services.AddScoped<IRepository<Post>, Repository<Post>>();
+            builder.Services.AddScoped<IRepository<PlanDeEntrenamiento>, Repository<PlanDeEntrenamiento>>();
+            builder.Services.AddScoped<IRepository<HistorialRendimiento>, Repository<HistorialRendimiento>>();
+            builder.Services.AddScoped<IRepository<Comentario>, Repository<Comentario>>();
+            builder.Services.AddScoped<IRepository<BibliotecaPlanUsuario>, Repository<BibliotecaPlanUsuario>>();
 
             //Cors generico (temporalmente) para el consumo en el front, proximamente se reconfigurara especificamente para el proyecto en despliegue de Angular
             builder.Services.AddCors(corsConfiguration =>
