@@ -22,14 +22,15 @@ namespace c19_38_BackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPost()
+        public async Task<ActionResult<IEnumerable<PostDto>>> GetPost()
         {
             var post = await _repository.GetAllAsync();
             if (post == null)
             {
                 return NotFound();
             }
-            return Ok(post);
+            var postDto = post.Select(p =>Mapper.MapPostToPostDto(p)).ToList();
+            return Ok(postDto);
         }
 
         [HttpGet("{id}", Name = "getPost")]
@@ -44,7 +45,8 @@ namespace c19_38_BackEnd.Controllers
             {
                 return NotFound();
             }
-            return Ok(post);
+            var postDto = Mapper.MapPostToPostDto(post);
+            return Ok(postDto);
         }
 
         [Authorize]
@@ -64,7 +66,7 @@ namespace c19_38_BackEnd.Controllers
                 var post = Mapper.MapPostDtoToPost(postDto);
                 await _repository.AddAsync(post);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetPost), new { id = postDto.IdPost }, post);
+                return CreatedAtAction(nameof(GetPost), new { id = postDto.IdPost }, postDto);
 
             }
             catch (Exception ex)

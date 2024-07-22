@@ -22,14 +22,15 @@ namespace c19_38_BackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<BibliotecaPlanUsuario>>> GetBibliotecaPlanUsuario()
+        public async Task<ActionResult<IEnumerable<BibliotecaPlanUsuarioDto>>> GetBibliotecaPlanUsuario()
         {
             var biblioteca = await _repository.GetAllAsync();
             if (biblioteca == null)
             {
                 return NotFound();
             }
-            return Ok(biblioteca);
+            var bibliotecaDto = biblioteca.Select(b=>Mapper.MapBibliotecaPlanUsuarioToBibliotecaPlanUsuarioDto(b)).ToList();
+            return Ok(bibliotecaDto);
         }
 
         [HttpGet("{id}", Name = "getBibliotecaPlanUsuario")]
@@ -37,14 +38,15 @@ namespace c19_38_BackEnd.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<BibliotecaPlanUsuario>>> GetBibliotecaPlanUsuario(int id)
+        public async Task<ActionResult<IEnumerable<BibliotecaPlanUsuarioDto>>> GetBibliotecaPlanUsuario(int id)
         {
             var biblioteca = await _repository.GetByIdAsync(id);
             if (biblioteca == null)
             {
                 return NotFound();
             }
-            return Ok(biblioteca);
+            var bibliotecaDto = Mapper.MapBibliotecaPlanUsuarioToBibliotecaPlanUsuarioDto(biblioteca);
+            return Ok(bibliotecaDto);
         }
 
         [Authorize]
@@ -64,7 +66,7 @@ namespace c19_38_BackEnd.Controllers
                 var biblioteca = Mapper.MapBibliotecaPlanUsuarioDtoToBibliotecaPlanUsuario(bibliotecaPlanUsuarioDto);
                 await _repository.AddAsync(biblioteca);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetBibliotecaPlanUsuario), new { id = biblioteca.IdBiblioteca }, biblioteca);
+                return CreatedAtAction(nameof(GetBibliotecaPlanUsuario), new { id = biblioteca.IdBiblioteca }, bibliotecaPlanUsuarioDto);
 
             }
             catch (Exception ex)

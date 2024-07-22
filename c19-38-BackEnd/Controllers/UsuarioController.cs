@@ -22,14 +22,15 @@ namespace c19_38_BackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuario()
+        public async Task<ActionResult<IEnumerable<UsuarioDto>>> GetUsuario()
         {
             var usuario = await _repository.GetAllAsync();
             if (usuario == null)
             {
                 return NotFound();
             }
-            return Ok(usuario);
+            var usuariosDto = usuario.Select(e => Mapper.MapUsuarioToUsuarioDto(e)).ToList();
+            return Ok(usuariosDto);
         }
 
         [HttpGet("{id}", Name = "getUsuario")]
@@ -37,14 +38,15 @@ namespace c19_38_BackEnd.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuario(int id)
+        public async Task<ActionResult<IEnumerable<UsuarioDto>>> GetUsuario(int id)
         {
             var usuario = await _repository.GetByIdAsync(id);
             if (usuario == null)
             {
                 return NotFound();
             }
-            return Ok(usuario);
+            var usuarioDto = Mapper.MapUsuarioToUsuarioDto(usuario);
+            return Ok(usuarioDto);
         }
 
         [Authorize]
@@ -64,7 +66,7 @@ namespace c19_38_BackEnd.Controllers
                 var usuario = Mapper.MapUsuarioDtoToUsuario(usuarioDto);
                 await _repository.AddAsync(usuario);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
+                return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuarioDto);
 
             }
             catch (Exception ex)

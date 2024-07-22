@@ -22,14 +22,15 @@ namespace c19_38_BackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<PlanDeEntrenamiento>>> GetPlanDeEntrenamiento()
+        public async Task<ActionResult<IEnumerable<PlanDeEntrenamientoDto>>> GetPlanDeEntrenamiento()
         {
             var plan = await _repository.GetAllAsync();
             if (plan == null)
             {
                 return NotFound();
             }
-            return Ok(plan);
+            var planDto = plan.Select(p =>Mapper.MapPlanDeEntretamientoToPlanDeEntrenamientoDto(p)).ToList();
+            return Ok(planDto);
         }
 
         [HttpGet("{id}", Name = "getPlanDeEntrenamiento")]
@@ -37,14 +38,15 @@ namespace c19_38_BackEnd.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<PlanDeEntrenamiento>>> GetPlanDeEntrenamiento(int id)
+        public async Task<ActionResult<IEnumerable<PlanDeEntrenamientoDto>>> GetPlanDeEntrenamiento(int id)
         {
             var plan = await _repository.GetByIdAsync(id);
             if (plan == null)
             {
                 return NotFound();
             }
-            return Ok(plan);
+            var planDto = Mapper.MapPlanDeEntretamientoToPlanDeEntrenamientoDto(plan);
+            return Ok(planDto);
         }
 
         [Authorize]
@@ -64,7 +66,7 @@ namespace c19_38_BackEnd.Controllers
                 var plan = Mapper.MapPlanDeEntrenamientoDtoToPlanDeEntrenamiento(planDeEntrenamientoDto);
                 await _repository.AddAsync(plan);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetPlanDeEntrenamiento), new { id = plan.IdPlan }, plan);
+                return CreatedAtAction(nameof(GetPlanDeEntrenamiento), new { id = plan.IdPlan }, planDeEntrenamientoDto);
 
             }
             catch (Exception ex)

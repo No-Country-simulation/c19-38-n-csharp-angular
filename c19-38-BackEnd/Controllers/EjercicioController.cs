@@ -22,14 +22,15 @@ namespace c19_38_BackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Ejercicio>>> GetEjercicio()
+        public async Task<ActionResult<IEnumerable<EjercicioDto>>> GetEjercicio()
         {
-            var ejercicio = await _repository.GetAllAsync();
-            if (ejercicio == null)
+            var ejercicios = await _repository.GetAllAsync();
+            if (ejercicios == null)
             {
                 return NotFound();
             }
-            return Ok(ejercicio);
+            var ejercicioDtos = ejercicios.Select(e => Mapper.MapEjercicioToEjercicioDto(e)).ToList();
+            return Ok(ejercicioDtos);
         }
 
         [HttpGet("{id}", Name = "getEjercicio")]
@@ -37,14 +38,15 @@ namespace c19_38_BackEnd.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Ejercicio>>> GetEjercicio(int id)
+        public async Task<ActionResult<IEnumerable<EjercicioDto>>> GetEjercicio(int id)
         {
             var ejercicio = await _repository.GetByIdAsync(id);
             if (ejercicio == null)
             {
                 return NotFound();
             }
-            return Ok(ejercicio);
+            var ejercicioDto = Mapper.MapEjercicioToEjercicioDto(ejercicio);
+            return Ok(ejercicioDto);
         }
 
         [Authorize]
@@ -64,13 +66,13 @@ namespace c19_38_BackEnd.Controllers
                 var ejercicio = Mapper.MapEjercicioDtoToEjercicio(ejercicioDto);
                 await _repository.AddAsync(ejercicio);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetEjercicio), new { id = ejercicio.IdEjercicio }, ejercicio);
+                return CreatedAtAction(nameof(GetEjercicio), new { id = ejercicio.IdEjercicio }, ejercicioDto);
 
             }
             catch (Exception ex)
             {
 
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error saving the series to the database");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error saving the ejercicio to the database");
             }
         }
 
