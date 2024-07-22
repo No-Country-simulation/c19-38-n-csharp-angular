@@ -24,7 +24,7 @@ namespace c19_38_BackEnd
         //Contraseña Somee: sNvsd9t=SV}hV!L
 
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +62,7 @@ namespace c19_38_BackEnd
             builder.Services.AddScoped<IRepository<HistorialRendimiento>, Repository<HistorialRendimiento>>();
             builder.Services.AddScoped<IRepository<Comentario>, Repository<Comentario>>();
             builder.Services.AddScoped<IRepository<BibliotecaPlanUsuario>, Repository<BibliotecaPlanUsuario>>();
+            
 
             //Cors generico (temporalmente) para el consumo en el front, proximamente se reconfigurara especificamente para el proyecto en despliegue de Angular
             builder.Services.AddCors(corsConfiguration =>
@@ -103,8 +104,8 @@ namespace c19_38_BackEnd
             // Configurar políticas de autorización.
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Atleta", policy => policy.RequireRole("Atleta"));
-                options.AddPolicy("Entrenador", policy => policy.RequireRole("Entrenador"));
+                options.AddPolicy(Roles.Atleta, policy => policy.RequireRole(Roles.Atleta));
+                options.AddPolicy(Roles.Entrenador, policy => policy.RequireRole(Roles.Entrenador));
             });
 
             // Configurar Swagger para la documentación de la API.
@@ -158,12 +159,10 @@ namespace c19_38_BackEnd
             //Obtiene la configuracion almacenada en appSettings.json de la key "JwtSettings":
             builder.Configuration.Bind("CloudinarySettings", cloudSettings);
 
-            //Añadiendo servicios al contenedor
-
-            //Este es un ejemplo de como se añadiria un repositorio generico para la entidad Usuario (Funcional)
-            builder.Services.AddScoped<IRepository<Usuario>, Repository<Usuario>>();
             builder.Services.AddSingleton(bindJwtSettings);
             builder.Services.AddSingleton(cloudSettings);
+
+
 
             var app = builder.Build();
 
@@ -173,6 +172,9 @@ namespace c19_38_BackEnd
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            //Crea los roles en caso de que no existan
+            await CrearRoles(app);
 
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -186,6 +188,26 @@ namespace c19_38_BackEnd
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static async Task CrearRoles(WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+                string[] roles = { Roles.Entrenador, Roles.Atleta };
+                IdentityResult roleResult;
+
+                foreach (var rol in roles)
+                {
+                    var roleExist = await roleManager.RoleExistsAsync(rol);
+                    if (!roleExist)
+                    {
+                        // Crear los roles y guardarlos en la base de datos
+                        roleResult = await roleManager.CreateAsync(new IdentityRole<int>(rol));
+                    }
+                }
+            }
         }
     }
 }

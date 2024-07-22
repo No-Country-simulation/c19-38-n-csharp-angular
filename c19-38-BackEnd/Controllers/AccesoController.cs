@@ -101,26 +101,5 @@ namespace c19_38_BackEnd.Controllers
 
             return Ok(tokenJwt);
         }
-
-
-        // DESPUES HAY QUE BORRARLO
-        [HttpGet("AñadirRoles/{clave}")]
-        public async Task<IActionResult> AñadirRoles(int clave)
-        {
-            //Esta clave es momentanea jaja
-            if(clave == 2191)
-            {
-                await _roleManager.CreateAsync(new IdentityRole<int>
-                {
-                    Name = Roles.Atleta
-                });
-                await _roleManager.CreateAsync(new IdentityRole<int>
-                {
-                    Name = Roles.Entrenador
-                });
-                return Ok("Roles creados");
-            }
-            return NotFound("Clave incorrecta");  
-        }
     }
 }
