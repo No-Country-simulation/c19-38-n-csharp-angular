@@ -71,9 +71,6 @@ namespace c19_38_BackEnd
             //Obtiene la configuracion almacenada en appSettings.json de la key "JwtSettings":
             builder.Configuration.Bind("JwtSettings", bindJwtSettings);
 
-
-            builder.Services.AddSingleton(bindJwtSettings);
-
             var key = Encoding.UTF8.GetBytes(bindJwtSettings.IssuerSigningKey);
 
             //Añado la validacion del token jwt para cada request
@@ -147,10 +144,18 @@ namespace c19_38_BackEnd
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             builder.Services.AddFluentValidationAutoValidation();
 
-            //Añadiendo repositorio al contenedor de servicios
 
-            //Este es un ejemplo de como se añadiria un repositorio generico para la entidad Usuario
+            // Configurar JWT settings.
+            var cloudSettings = new CloudinarySettings();
+            //Obtiene la configuracion almacenada en appSettings.json de la key "JwtSettings":
+            builder.Configuration.Bind("CloudinarySettings", cloudSettings);
+
+            //Añadiendo servicios al contenedor
+
+            //Este es un ejemplo de como se añadiria un repositorio generico para la entidad Usuario (Funcional)
             builder.Services.AddScoped<IRepository<Usuario>, Repository<Usuario>>();
+            builder.Services.AddSingleton(bindJwtSettings);
+            builder.Services.AddSingleton(cloudSettings);
 
             var app = builder.Build();
 
