@@ -20,7 +20,7 @@ namespace c19_38_BackEnd.Map
                 Disciplina = registroDto.Disciplina,
                 Genero = registroDto.Genero,
                 Email = registroDto.Email,
-                UserName = registroDto.Nombre,
+                UserName = registroDto.Nombre.Replace(" ",""),
             };
         }
 

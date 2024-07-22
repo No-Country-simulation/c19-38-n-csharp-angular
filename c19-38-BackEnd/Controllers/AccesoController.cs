@@ -45,7 +45,7 @@ namespace c19_38_BackEnd.Controllers
             }
 
 
-            return NotFound();
+            return Created();
         }
 
         [HttpPost("Login")]
