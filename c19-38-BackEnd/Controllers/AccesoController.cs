@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace c19_38_BackEnd.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccesoController : ControllerBase
     {
@@ -43,10 +43,10 @@ namespace c19_38_BackEnd.Controllers
         /// <response code="203">El usuario se creó con éxito</response>
         /// <response code="400">Informacion del RegistroDto no valida</response>
         /// <returns>Una acción de resultado HTTP.</returns>
-        [ProducesResponseType(500)]
-        [ProducesResponseType(201)]
-        [ProducesResponseType(203)]
-        [ProducesResponseType(400,Type =typeof(ProblemDetails))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status203NonAuthoritative)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest,Type =typeof(ProblemDetails))]
         [HttpPost("Registro")]
         public async Task<IActionResult> Registro([FromBody] RegistroDto registroDto)
         {
@@ -77,9 +77,9 @@ namespace c19_38_BackEnd.Controllers
         /// <response code="200">Inicio de sesión exitoso, retorna el token JWT</response>
         /// <response code="400">Información del LoginDto no válida</response>
         /// <returns>Una acción de resultado HTTP.</returns>
-        [ProducesResponseType(500)]
-        [ProducesResponseType(200, Type = typeof(string))]
-        [ProducesResponseType(400, Type = typeof(ProblemDetails))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {

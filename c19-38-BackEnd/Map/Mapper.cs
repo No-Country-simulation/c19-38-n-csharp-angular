@@ -294,8 +294,7 @@ namespace c19_38_BackEnd.Map
                 IdBiblioteca = biblioteca.IdBiblioteca,
                 FechaGuardado = biblioteca.FechaGuardado,
                 IdPlan = biblioteca.IdPlan,
-                IdUsuario = biblioteca.IdUsuario,
-                PlanDeEntrenamiento = biblioteca.PlanDeEntrenamiento
+                IdUsuario = biblioteca.IdUsuario
             };
         }
 
@@ -306,8 +305,7 @@ namespace c19_38_BackEnd.Map
                 IdBiblioteca = biblioteca.IdBiblioteca,
                 FechaGuardado = biblioteca.FechaGuardado,
                 IdPlan = biblioteca.IdPlan,
-                IdUsuario = biblioteca.IdUsuario,
-                PlanDeEntrenamiento = biblioteca.PlanDeEntrenamiento
+                IdUsuario = biblioteca.IdUsuario
             };
         }
 
