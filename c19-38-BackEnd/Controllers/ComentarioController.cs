@@ -22,14 +22,15 @@ namespace c19_38_BackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Comentario>>> GetComentario()
+        public async Task<ActionResult<IEnumerable<ComentarioDto>>> GetComentario()
         {
             var comentario = await _repository.GetAllAsync();
             if (comentario == null)
             {
                 return NotFound();
             }
-            return Ok(comentario);
+            var comentarioDto = comentario.Select(x =>Mapper.MapComentarioToComentarioDto(x)).ToList();
+            return Ok(comentarioDto);
         }
 
         [HttpGet("{id}", Name = "getComentario")]
@@ -37,14 +38,15 @@ namespace c19_38_BackEnd.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Comentario>>> GetComentario(int id)
+        public async Task<ActionResult<IEnumerable<ComentarioDto>>> GetComentario(int id)
         {
             var comentario = await _repository.GetByIdAsync(id);
             if (comentario == null)
             {
                 return NotFound();
             }
-            return Ok(comentario);
+            var comentarioDto = Mapper.MapComentarioToComentarioDto(comentario);
+            return Ok(comentarioDto);
         }
 
         [Authorize]
@@ -64,7 +66,7 @@ namespace c19_38_BackEnd.Controllers
                 var comentario = Mapper.MapComentarioDtoToComentario(comentarioDto);
                 await _repository.AddAsync(comentario);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetComentario), new { id = comentario.IdComentario }, comentario);
+                return CreatedAtAction(nameof(GetComentario), new { id = comentario.IdComentario }, comentarioDto);
 
             }
             catch (Exception ex)

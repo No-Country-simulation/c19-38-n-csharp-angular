@@ -22,14 +22,15 @@ namespace c19_38_BackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<HistorialRendimiento>>> GetHistorialRendimiento()
+        public async Task<ActionResult<IEnumerable<HistorialRendimientoDto>>> GetHistorialRendimiento()
         {
             var historial = await _repository.GetAllAsync();
             if (historial == null)
             {
                 return NotFound();
             }
-            return Ok(historial);
+            var historialDto = historial.Select(h => Mapper.MapHistorialRendimientoToHistorialRendimientoDto(h)).ToList();
+            return Ok(historialDto);
         }
 
         [HttpGet("{id}", Name = "getHistorialRendimiento")]
@@ -37,14 +38,15 @@ namespace c19_38_BackEnd.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<HistorialRendimiento>>> GetHistorialRendimiento(int id)
+        public async Task<ActionResult<IEnumerable<HistorialRendimientoDto>>> GetHistorialRendimiento(int id)
         {
             var historial = await _repository.GetByIdAsync(id);
             if (historial == null)
             {
                 return NotFound();
             }
-            return Ok(historial);
+            var historialDto = Mapper.MapHistorialRendimientoToHistorialRendimientoDto(historial);
+            return Ok(historialDto);
         }
 
         [Authorize]
@@ -64,7 +66,7 @@ namespace c19_38_BackEnd.Controllers
                 var historial = Mapper.MapHistorialRendimientoDtoToHistorialRendimiento(historialRendimientoDto);
                 await _repository.AddAsync(historial);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetHistorialRendimiento), new { id = historial.IdHistorial }, historial);
+                return CreatedAtAction(nameof(GetHistorialRendimiento), new { id = historial.IdHistorial }, historialRendimientoDto);
 
             }
             catch (Exception ex)

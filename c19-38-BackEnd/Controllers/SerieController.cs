@@ -22,14 +22,15 @@ namespace c19_38_BackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Serie>>>GetSerie()
+        public async Task<ActionResult<IEnumerable<SerieDto>>>GetSerie()
         {
             var series = await _repository.GetAllAsync();
             if (series == null)
             {
                 return NotFound();
             }
-            return Ok(series);
+            var seriesDto = series.Select(e=>Mapper.MapSerieToSerieDto(e)).ToList();
+            return Ok(seriesDto);
         }
 
         [HttpGet("{id}", Name = "getSerie")]
@@ -37,14 +38,15 @@ namespace c19_38_BackEnd.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Serie>>>GetSerie(int id)
+        public async Task<ActionResult<IEnumerable<SerieDto>>>GetSerie(int id)
         {
             var serie = await _repository.GetByIdAsync(id);
             if (serie == null)
             {
                 return NotFound();
             }
-            return Ok(serie);
+            var serieDto = Mapper.MapSerieToSerieDto(serie);
+            return Ok(serieDto);
         }
 
         [Authorize]
@@ -64,7 +66,7 @@ namespace c19_38_BackEnd.Controllers
                 var serie = Mapper.MapSerieDtoToSerie(serieDto);
                 await _repository.AddAsync(serie);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetSerie), new {id = serie.IdSerie}, serie);
+                return CreatedAtAction(nameof(GetSerie), new {id = serie.IdSerie}, serieDto);
 
             }
             catch (Exception ex)
