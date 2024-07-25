@@ -1,5 +1,15 @@
+using c19_38_BackEnd.Configuracion;
+using c19_38_BackEnd.Datos;
+using c19_38_BackEnd.Modelos;
+using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Reflection;
+using System.Text;
 namespace c19_38_BackEnd
 {
     public class Program
@@ -23,6 +33,21 @@ namespace c19_38_BackEnd
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
 
+            //Añadir DbContext al contenedor de servicios
+            builder.Services.AddDbContext<DefaultContext>(configuration =>
+            {
+                configuration.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
+            });
+
+
+            builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
+            {
+
+            }).AddEntityFrameworkStores<DefaultContext>();
+
+            builder.Services.AddScoped<UserManager<Usuario>>();
+            builder.Services.AddScoped<SignInManager<Usuario>>();
+            builder.Services.AddScoped<RoleManager<IdentityRole<int>>>();
 
             //Cors generico (temporalmente) para el consumo en el front, proximamente se reconfigurara especificamente para el proyecto en despliegue de Angular
             builder.Services.AddCors(corsConfiguration =>
@@ -35,6 +60,27 @@ namespace c19_38_BackEnd
                 });
             });
 
+            var bindJwtSettings = new JwtSettings();
+            //Obtiene la configuracion almacenada en appSettings.json de la key "JwtSettings":
+            builder.Configuration.Bind("JwtSettings", bindJwtSettings);
+
+            var key = Encoding.UTF8.GetBytes(bindJwtSettings.IssuerSigningKey);
+
+            //Añado la validacion del token jwt para cada request
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(config =>
+                {
+                    config.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = bindJwtSettings.ValidateIssuerSigningKey,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = bindJwtSettings.ValidateIssuer,
+                        ValidateAudience = bindJwtSettings.ValidateAudience,
+                        RequireExpirationTime = bindJwtSettings.RequiredExpirationTime,
+                        ValidateLifetime = bindJwtSettings.ValidateLifeTime
+                    };
+                });
+
             builder.Services.AddSwaggerGen(swaggerConfiguration=>
             {
                 //Encabezado de la API
@@ -45,11 +91,38 @@ namespace c19_38_BackEnd
                     Version = "v1"
                 });
 
+                swaggerConfiguration.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Autorizacion JWT en Header usando el esquema Bearer"
+                });
+
+                swaggerConfiguration.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },new string[]{ }
+                    } 
+                });
+
                 //Configuración para añadir comentarios en XML
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 swaggerConfiguration.IncludeXmlComments(xmlPath);
             });
+
+            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+            builder.Services.AddFluentValidationAutoValidation();
 
             var app = builder.Build();
 
@@ -63,8 +136,9 @@ namespace c19_38_BackEnd
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseCors("Cors policy for Front End Angular");
             app.UseHttpsRedirection();
-
+            //app.UseAuthentication();
             app.UseAuthorization();
 
 
