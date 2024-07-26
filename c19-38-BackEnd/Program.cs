@@ -3,6 +3,7 @@ using c19_38_BackEnd.Datos;
 using c19_38_BackEnd.Interfaces;
 using c19_38_BackEnd.Modelos;
 using c19_38_BackEnd.Repositorio;
+using c19_38_BackEnd.Servicios;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -62,6 +63,8 @@ namespace c19_38_BackEnd
             builder.Services.AddScoped<IRepository<HistorialRendimiento>, Repository<HistorialRendimiento>>();
             builder.Services.AddScoped<IRepository<Comentario>, Repository<Comentario>>();
             builder.Services.AddScoped<IRepository<BibliotecaPlanUsuario>, Repository<BibliotecaPlanUsuario>>();
+            builder.Services.AddScoped<IRepository<DescripcionObjetivos>, Repository<DescripcionObjetivos>>();
+            builder.Services.AddScoped<ICloudMediaService, CloudMediaService>();
             
 
             //Cors generico (temporalmente) para el consumo en el front, proximamente se reconfigurara especificamente para el proyecto en despliegue de Angular
@@ -104,7 +107,7 @@ namespace c19_38_BackEnd
             // Configurar políticas de autorización.
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy(Roles.Atleta, policy => policy.RequireRole(Roles.Atleta));
+                options.AddPolicy(Roles.Aprendiz, policy => policy.RequireRole(Roles.Aprendiz));
                 options.AddPolicy(Roles.Entrenador, policy => policy.RequireRole(Roles.Entrenador));
             });
 
@@ -195,7 +198,7 @@ namespace c19_38_BackEnd
             using (var scope = app.Services.CreateScope())
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
-                string[] roles = { Roles.Entrenador, Roles.Atleta };
+                string[] roles = { Roles.Entrenador, Roles.Aprendiz };
                 IdentityResult roleResult;
 
                 foreach (var rol in roles)

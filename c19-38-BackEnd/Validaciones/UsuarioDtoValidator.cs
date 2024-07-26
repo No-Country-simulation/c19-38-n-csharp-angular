@@ -28,10 +28,10 @@ namespace c19_38_BackEnd.Validaciones
 
             RuleFor(x => x.Altura)
                 .GreaterThan(0).WithMessage("La altura debe ser mayor a 0.")
-                .LessThanOrEqualTo(2.5f).WithMessage("La altura debe ser menor o igual a 2.5 metros.");
+                .LessThanOrEqualTo(250).WithMessage("La altura debe ser menor o igual a 2.5 metros.");
 
-            RuleFor(x => x.ActividadFisica)
-                .IsInEnum().WithMessage("NivelActividadFisica debe ser un valor válido del enum NivelActividadFisica.");
+            //RuleFor(x => x.ActividadFisica)
+            //    .IsInEnum().WithMessage("NivelActividadFisica debe ser un valor válido del enum NivelActividadFisica.");
 
             RuleFor(x => x.MediaUrl)
                 .MaximumLength(2048).WithMessage("La URL del medio no puede exceder los 2048 caracteres.");

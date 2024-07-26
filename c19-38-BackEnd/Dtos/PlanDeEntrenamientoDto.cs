@@ -5,6 +5,7 @@ namespace c19_38_BackEnd.Dtos
     public class PlanDeEntrenamientoDto
     {
         public int IdPlan { get; set; }
+        public string Titulo { get; set; }
         public string Descripcion { get; set; }
         public Disciplina TipoDisciplina { get; set; }
         public Nivel Nivel { get; set; }

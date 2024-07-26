@@ -21,7 +21,7 @@ namespace c19_38_BackEnd.Validaciones
                 .Length(6, 12).WithMessage("El campo Contraseña debe estar en un rango de 6 a 12 caracteres");
 
             RuleFor(x => x)
-                .MustAsync(UsuarioExistenteConEmail).WithMessage("No existe un usuario con el usuario proporcionado")
+                .MustAsync(UsuarioExistenteConEmail).WithMessage("No existe un usuario con el email proporcionado")
                 .When(x => !string.IsNullOrEmpty(x.Email) && !string.IsNullOrEmpty(x.Contraseña))
                 .MustAsync(ContraseñaCorrespondeUsuario).WithMessage("La contraseña es invalida")
                 .When(x => !string.IsNullOrEmpty(x.Email) && !string.IsNullOrEmpty(x.Contraseña));

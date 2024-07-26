@@ -7,6 +7,34 @@ namespace c19_38_BackEnd.Map
     public static class Mapper
     {
 
+        //Model: DescripcionObjetivosDto 
+        public static DescripcionObjetivos MapDescripcionObjetivosDtoToDescripcionObjetivos(this DescripcionObjetivosDto descripcionObjetivosDto) 
+        {
+            return new DescripcionObjetivos
+            {
+                ActividadFisica = descripcionObjetivosDto.ActividadFisica,
+                EquiposEnCasa = descripcionObjetivosDto.EquiposEnCasa,
+                LugarEntrenamiento = descripcionObjetivosDto.LugarEntrenamiento,
+                MayorObstaculo = descripcionObjetivosDto.MayorObstaculo,
+                Motivacion = descripcionObjetivosDto.Motivacion,
+                Objetivo = descripcionObjetivosDto.Objetivo,
+                PreferenciaHora = descripcionObjetivosDto.PreferenciaHora
+            };
+        }
+
+        //Model: EditUsuarioDto, Action: PutUsuario
+
+        public static void MapEditUsuarioDtoToUsuario(this EditUsuarioDto usuarioDto,Usuario usuarioAEditar)
+        {
+            usuarioAEditar.Nombre = usuarioDto.Nombre;
+            usuarioAEditar.Apellido = usuarioDto.Apellido;
+            usuarioAEditar.Genero = usuarioDto.Genero;
+            usuarioAEditar.FechaDeNac = usuarioDto.FechaDeNac;
+            usuarioAEditar.Peso = usuarioDto.Peso;
+            usuarioAEditar.Altura = usuarioDto.Altura;
+            usuarioAEditar.Disciplina = usuarioDto.Disciplina;
+        }
+
         // Model: RegistroDTO
         public static Usuario MapRegistroDtoToUsuario(this RegistroDto registroDto)
         {
@@ -36,7 +64,6 @@ namespace c19_38_BackEnd.Map
                 FechaDeNac = usuario.FechaDeNac,
                 Peso = usuario.Peso,
                 Altura = usuario.Altura,
-                ActividadFisica = usuario.ActividadFisica,
                 MediaUrl = usuario.MediaUrl,
                 Disciplina = usuario.Disciplina
             };
@@ -51,7 +78,6 @@ namespace c19_38_BackEnd.Map
                 FechaDeNac = usuario.FechaDeNac,
                 Peso = usuario.Peso,
                 Altura = usuario.Altura,
-                ActividadFisica = usuario.ActividadFisica,
                 MediaUrl = usuario.MediaUrl,
                 Disciplina = usuario.Disciplina
             };

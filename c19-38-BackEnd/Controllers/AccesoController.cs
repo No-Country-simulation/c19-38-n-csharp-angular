@@ -57,7 +57,7 @@ namespace c19_38_BackEnd.Controllers
                 return StatusCode(500);
             }
             //Añade el rol segun si es entrenador o no.
-            var resultado = await _userManager.AddToRoleAsync(user, registroDto.EsEntrenador?Roles.Entrenador:Roles.Atleta);
+            var resultado = await _userManager.AddToRoleAsync(user, registroDto.EsEntrenador?Roles.Entrenador:Roles.Aprendiz);
 
             if(!resultado.Succeeded)
             {

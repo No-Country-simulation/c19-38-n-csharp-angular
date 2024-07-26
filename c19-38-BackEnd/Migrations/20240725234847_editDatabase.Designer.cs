@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using c19_38_BackEnd.Datos;
 
@@ -11,9 +12,11 @@ using c19_38_BackEnd.Datos;
 namespace c19_38_BackEnd.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    partial class DefaultContextModelSnapshot : ModelSnapshot
+    [Migration("20240725234847_editDatabase")]
+    partial class editDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,6 +225,9 @@ namespace c19_38_BackEnd.Migrations
                     b.Property<int>("ActividadFisica")
                         .HasColumnType("int");
 
+                    b.Property<float>("Altura")
+                        .HasColumnType("real");
+
                     b.Property<string>("EquiposEnCasa")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -243,6 +249,9 @@ namespace c19_38_BackEnd.Migrations
                     b.Property<string>("Objetivo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Peso")
+                        .HasColumnType("real");
 
                     b.Property<int>("PreferenciaHora")
                         .HasColumnType("int");

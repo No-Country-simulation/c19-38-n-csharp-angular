@@ -14,10 +14,10 @@ namespace c19_38_BackEnd.Servicios
         {
             return new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier,usuario.Id.ToString()),
-                new Claim(ClaimTypes.Name,usuario.Nombre),
-                new Claim(ClaimTypes.Email,usuario.Email),
-                new Claim(ClaimTypes.Role,rol)
+                new Claim("id",usuario.Id.ToString()),
+                new Claim("name",usuario.Nombre),
+                new Claim("email",usuario.Email),
+                new Claim("rol",rol)
             };
         }
 

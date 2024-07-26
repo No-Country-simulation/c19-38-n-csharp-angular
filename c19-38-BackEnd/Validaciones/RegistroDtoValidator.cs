@@ -22,13 +22,15 @@ namespace c19_38_BackEnd.Validaciones
                 .NotEmpty().WithMessage("El campo Email no puede estar vacio")
                 .EmailAddress().WithMessage("Formato de correo invalido")
                 .MustAsync(NoExisteUsuarioConEmail).WithMessage("El correo electronico ya esta en uso")
-                .When(x => !string.IsNullOrEmpty(x.Email) && !string.IsNullOrEmpty(x.Contraseña)); 
+                .When(x => !string.IsNullOrEmpty(x.Email) && !string.IsNullOrEmpty(x.Contraseña));
 
             RuleFor(x => x.Peso)
-                .GreaterThan(0).WithMessage("El campo Peso no puede ser menor o igual a 0");
+                .GreaterThan(0).WithMessage("El peso debe ser mayor a 0.")
+                .LessThanOrEqualTo(300).WithMessage("El peso debe ser menor o igual a 300 kg.");
 
             RuleFor(x => x.Altura)
-                .GreaterThan(0).WithMessage("El campo Altura no puede ser menor o igual a 0");
+                .GreaterThan(0).WithMessage("La altura debe ser mayor a 0.")
+                .LessThanOrEqualTo(250).WithMessage("La altura debe ser menor o igual a 2.5 metros.");
 
             RuleFor(x => x.FechaNacimiento)
                 .NotEmpty().WithMessage("La fecha de nacimiento no puede estar vacia")

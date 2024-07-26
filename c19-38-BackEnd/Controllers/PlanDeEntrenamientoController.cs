@@ -49,6 +49,41 @@ namespace c19_38_BackEnd.Controllers
             return Ok(planDto);
         }
 
+        [HttpGet("PlanesDeEntrenamientoSegun/{usuarioId}")]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(IEnumerable<PlanDeEntrenamientoDto>))]
+        public async Task<ActionResult<IEnumerable<PlanDeEntrenamientoDto>>> GetPlanDeEntrenamientoUsuarioId(int usuarioId)
+        {
+            var planDeEntrnamientoUsuarioId = (await _repository.GetAllAsync()).Where(x => x.IdAutorUsuario == usuarioId).ToList();
+            
+            if(planDeEntrnamientoUsuarioId is null)
+            {
+                return Ok(new PlanDeEntrenamientoDto[] { });
+            }
+            var planesDeEntrenamientoDtos = Mapper.MapListPlanDeEntrenamientoToListPlanDeEntrenamientoDto(planDeEntrnamientoUsuarioId);
+
+            return Ok(planesDeEntrenamientoDtos);
+        }
+        [HttpGet("PlanesFiltrado")]
+        public async Task<ActionResult<IEnumerable<PlanDeEntrenamientoDto>>> GetPlanesFiltradoPaginado(
+            [FromQuery] int pagina = 1, 
+            [FromQuery] string nombre = "", 
+            [FromQuery] bool ordenadoAlfabetico = false,
+            [FromQuery] bool ordenadoFecha = false)
+        {
+            var planes = (await _repository.GetAllAsync()).MapListPlanDeEntrenamientoToListPlanDeEntrenamientoDto().AsQueryable();
+            if(!string.IsNullOrEmpty(nombre))
+            {
+                planes = planes.Where(p => p.Descripcion.Contains(nombre,StringComparison.OrdinalIgnoreCase));  
+            }
+            if(ordenadoAlfabetico)
+            {
+                planes = planes.OrderBy(p => p.Descripcion);
+            }
+            if (ordenadoFecha)
+                planes = planes.OrderByDescending(p => p.FechaPublicacion);
+            return planes.Skip(pagina - 1).Take(10).ToList();
+        }
+
         [Authorize]
         [ProducesResponseType(500)]
         [ProducesResponseType(201)]
