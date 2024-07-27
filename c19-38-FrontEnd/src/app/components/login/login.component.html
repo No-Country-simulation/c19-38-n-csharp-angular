@@ -1,0 +1,108 @@
+<!-- Navbar -->
+<nav class="bg-white border-b-4 border-[#2D3648] mb-4 p-4">
+    <div class="flex justify-between items-center">
+        <div class="logo bg-[#2D3648] text-white text-2xl py-2 px-12">Logo</div>
+        <div class="tabs flex space-x-11 relative">
+            <a href="#" class="tab text-[#2D3648]">Inicio</a>
+            <div class="relative group">
+                <a href="#" class="tab text-[#2D3648] flex items-center relative">
+                    Rutinas <span class="ml-1">&#9660;</span>
+                </a>
+                <div class="submenu absolute hidden group-hover:block bg-white border border-[#2D3648] mt-2 w-48 transition duration-300 ease-in-out">
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Rutinas</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Tips de nutrición</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Entrenando en casa</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Yoga</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Cardio</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Musculación</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">GAP</a>
+                </div>
+            </div>
+            <a href="#" class="tab text-[#2D3648]">Comunidad Fitness</a>
+            <a href="#" class="tab text-[#2D3648]">Producto</a>
+        </div>
+        <div class="buttons space-x-2">
+            <button class="btn border-2 border-[#2D3648] text-[#2D3648] py-2 px-3 font-bold">Iniciar sesión</button>
+            <button class="btn2 border-2 border-[#2D3648] bg-[#2D3648] text-white py-2 px-3 font-bold">Sumate</button>
+        </div>
+    </div>
+</nav>
+
+<!-- Sección de Iniciar Sesión -->
+<section class="flex flex-wrap justify-between items-center px-12 py-16 bg-gray-100">
+    <!-- Formulario de inicio de sesión -->
+    <div class="w-full md:w-1/2 bg-white p-8 shadow-lg rounded-lg max-w-md mx-auto">
+        <h1 class="text-3xl font-bold text-[#2D3648] mb-6 text-center">Iniciar sesión</h1>
+        <form>
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Correo electrónico:</label>
+                <input type="email" id="email" name="email" placeholder="Tu correo electrónico" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#0091D6] focus:border-[#0091D6]"/>
+            </div>
+            <div class="mb-4 relative password-container">
+                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Contraseña:</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  placeholder="Tu contraseña" 
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#0091D6] focus:border-[#0091D6]"
+                />
+                <span class="password-toggle" (click)="togglePasswordVisibility()">
+                    <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                </span>
+            </div>
+            <a href="#" class="text-sm text-[#00567F] hover:text-[#003c54] block mb-4 text-left">¿Olvidaste tu contraseña?</a>
+            <button type="submit" class="w-full bg-[#0091D6] text-white py-2 px-4 rounded-lg font-bold hover:bg-[#0077b6] transition">Iniciar sesión</button>
+        </form>
+        <p class="mt-4 text-gray-600 text-center">¿Aún no tienes cuenta? <a href="#" class="text-[#2D3648] font-semibold hover:text-[#00567F]">Regístrate</a></p>
+    </div>
+    <!-- Imagen de inicio de sesión -->
+    <div class="w-full md:w-1/2">
+        <img src="assets/iniciar.png" alt="Ejemplo" class="w-full h-full object-cover">
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-[#2D3648] text-white p-4">
+    <div class="grid grid-cols-4 gap-8">
+        <div>
+            <div class="text-2xl mb-2">Logo</div>
+        </div>
+        <div>
+            <h4 class="text-xl mb-2">Mapa del sitio</h4>
+            <ul class="space-y-1">
+                <li>About us</li>
+                <li>Services</li>
+                <li>Blog</li>
+                <li>Contact us</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-xl mb-2">PRODUCT</h4>
+            <ul class="space-y-1">
+                <li>Pricing</li>
+                <li>Featuring</li>
+                <li>Customers</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-xl mb-2">HELP</h4>
+            <ul class="space-y-1">
+                <li>Getting started</li>
+                <li>Network status</li>
+                <li>FAQs</li>
+                <li>Referral program</li>
+            </ul>
+        </div>
+    </div>
+    <div class="flex justify-center mt-4 space-x-4">
+        <i class="fab fa-facebook"></i>
+        <i class="fab fa-twitter"></i>
+        <i class="fab fa-instagram"></i>
+    </div>
+    <div class="text-center mt-4">
+        <p>&#64; 2024 Name of the company</p>
+    </div>
+</footer>
