@@ -12,8 +12,7 @@ namespace c19_38_BackEnd.Modelos
         public DateTime FechaDeNac {  get; set; }
         public float Peso { get; set; }
         public float Altura { get; set; }
-        public NivelActividadFisica ActividadFisica {  get; set; }
-        public string? MediaUrl { get; set; }
+        public string MediaUrl { get; set; } = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH23wl-q67cob4TWDwiHMie9RaSfX5A7Vm3tvs39u2KQ&s";
         public Disciplina Disciplina { get; set; }
 
     }
@@ -21,15 +20,6 @@ namespace c19_38_BackEnd.Modelos
     {
         Masculino,
         Femenino
-    }
-
-    public enum NivelActividadFisica
-    {
-        Sedentario,
-        Ligero,
-        Moderado,
-        Activo,
-        MuyActivo
     }
 
     public enum Disciplina

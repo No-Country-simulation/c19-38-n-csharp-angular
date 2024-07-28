@@ -1,6 +1,6 @@
 ﻿namespace c19_38_BackEnd.Configuracion
 {
-    internal class JwtSettings
+    public class JwtSettings
     {
         public bool ValidateIssuerSigningKey { get; set; }
         public string IssuerSigningKey { get; set; }
