@@ -1,0 +1,122 @@
+<nav class="bg-white border-b-4 border-[#2D3648] mb-4 p-4">
+  <div class="flex justify-between items-center">
+      <div class="logo bg-[#2D3648] text-white text-2xl py-2 px-12">Logo</div>
+      <div class="tabs flex space-x-11 relative">
+          <a href="#" class="tab text-[#2D3648]">Inicio</a>
+          <div class="relative group">
+              <a href="#" class="tab text-[#2D3648] flex items-center relative">
+                  Rutinas <span class="ml-1">&#9660;</span>
+              </a>
+              <div class="submenu absolute hidden group-hover:block bg-white border border-[#2D3648] mt-2 w-48 transition duration-300 ease-in-out">
+                  <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Rutinas</a>
+                  <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Tips de nutrición</a>
+                  <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Entrenando en casa</a>
+                  <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Yoga</a>
+                  <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Cardio</a>
+                  <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Musculación</a>
+                  <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">GAP</a>
+              </div>
+          </div>
+          <a href="#" class="tab text-[#2D3648]">Comunidad Fitness</a>
+          <a href="#" class="tab text-[#2D3648]">Producto</a>
+      </div>
+      <div class="buttons space-x-2">
+          <a class="btn border-2 border-[#2D3648] text-[#2D3648] py-2 px-3 font-bold" [routerLink]="'/login'">Iniciar sesión</a>
+          <a class="btn2 border-2 border-[#2D3648] bg-[#2D3648] text-white py-2 px-3 font-bold">Sumate</a>
+      </div>
+  </div>
+</nav>
+
+<!-- Sección de Objetivos -->
+<section class="flex flex-wrap justify-between items-center px-12 py-16 bg-gray-100">
+  <div class="objectives w-full md:w-1/2">
+      <h1 class="text-5xl font-bold text-[#2D3648]">Alcanza tus objetivos con NOMBREAPP</h1>
+      <p class="mt-12 text-lg">
+          Accede a ejercicios y programas específicos, desde yoga hasta intensas sesiones de peso corporal, con o sin equipamiento. <br><br>
+          Accede a nuestra membresía para entrenar con nuestros expertos, donde y cuando quieras.
+          <br> <br>
+          <strong>¡Súmate al entrenamiento y transforma tu vida hoy!</strong>
+      </p>
+      <div class="flex justify-center mt-12"> <!-- Contenedor flex para centrar el botón -->
+          <button class="bg-[#0091D6] text-white py-4 px-5 rounded-lg shadow-md" [routerLink]="'/login'">Consigue tu plan de entrenamiento</button>
+      </div>
+  </div>
+  <div class="w-full md:w-1/2">
+      <img src="assets/homeYoga.png" alt="Ejemplo" class="w-full h-auto">
+  </div>
+</section>
+
+<!-- Sección de Videos -->
+<section id="background-section" class="relative flex flex-col items-center justify-center h-[772px] bg-cover bg-center" style="background-image: url('assets/backgroundHome.png'); background-position: center;">
+  <h1 class="text-5xl md:text-6xl font-bold text-white text-center mb-4">Accede a videos explicativos para realizar los ejercicios correctamente.</h1>
+  <button class="mt-6 bg-[#0091D6] text-white py-2 px-6 rounded-lg shadow-md" routerLink="/login">Acceder</button>
+</section>
+
+<!-- Sección de Cards -->
+<section class="px-12 py-16 bg-gray-100">
+  <div class="card bg-white shadow-lg overflow-hidden mb-8">
+    <div class="w-full md:w-1/2 flex justify-center">
+      <!-- Flex para centrar la imagen -->
+      <img src="assets/foodHome.png" alt="Planificación de Comidas Saludables">
+    </div>
+    <div class="w-full md:w-1/2 card-content">
+      <h1 class="text-3xl font-bold text-[#2D3648]">Planificación de Comidas Saludables</h1>
+      <p class="mt-4 text-lg text-[#5c5c5c]">Aprende a planificar comidas nutritivas y balanceadas para toda la semana.</p>
+      <button class="mt-6">Ver</button>
+    </div>
+  </div>
+  <div class="card bg-white shadow-lg overflow-hidden">
+    <div class="w-full md:w-1/2 card-content">
+      <h1 class="text-3xl font-bold text-[#2D3648]">Ejercicios para Tonificar los Brazos</h1>
+      <p class="mt-4 text-lg text-[#5c5c5c]">Rutina de ejercicios en casa para brazos definidos y tonificados.</p>
+      <button class="mt-6">Súmate</button>
+    </div>
+    <div class="w-full md:w-1/2 flex justify-center">
+      <!-- Flex para centrar la imagen -->
+      <img src="assets/armsHome.png" alt="Ejercicios para Tonificar los Brazos">
+    </div>
+  </div>
+</section>
+
+
+<footer class="bg-[#2D3648] text-white p-4">
+  <div class="grid grid-cols-4 gap-8">
+      <div>
+          <div class="text-2xl mb-2">Logo</div>
+      </div>
+      <div>
+          <h4 class="text-xl mb-2">Mapa del sitio</h4>
+          <ul class="space-y-1">
+              <li>About us</li>
+              <li>Services</li>
+              <li>Blog</li>
+              <li>Contact us</li>
+          </ul>
+      </div>
+      <div>
+          <h4 class="text-xl mb-2">PRODUCT</h4>
+          <ul class="space-y-1">
+              <li>Pricing</li>
+              <li>Featuring</li>
+              <li>Customers</li>
+          </ul>
+      </div>
+      <div>
+          <h4 class="text-xl mb-2">HELP</h4>
+          <ul class="space-y-1">
+              <li>Getting started</li>
+              <li>Network status</li>
+              <li>FAQs</li>
+              <li>Referral program</li>
+          </ul>
+      </div>
+  </div>
+  <div class="flex justify-center mt-4 space-x-4">
+      <i class="fab fa-facebook"></i>
+      <i class="fab fa-twitter"></i>
+      <i class="fab fa-instagram"></i>
+  </div>
+  <div class="text-center mt-4">
+      <p>&#64; 2024 Name of the company</p>
+  </div>
+</footer>

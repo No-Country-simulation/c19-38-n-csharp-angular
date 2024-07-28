@@ -2,7 +2,7 @@
 {
     public static class Roles
     {
-        public const string Atleta = "Atleta";
+        public const string Aprendiz = "Aprendiz";
         public const string Entrenador = "Entrenador";
     }
 }
