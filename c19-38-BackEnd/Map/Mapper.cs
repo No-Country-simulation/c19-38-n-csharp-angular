@@ -7,6 +7,34 @@ namespace c19_38_BackEnd.Map
     public static class Mapper
     {
 
+        //Model: CreatePlanDeEntrenamientoDto, Action: Post
+
+        public static PlanDeEntrenamiento MapCreatePlanDeEntrnamientoDtoToPlanDeEntrenamiento(this CreatePlanDeEntrenamientoDto planDeEntrenamiento)
+        {
+            return new PlanDeEntrenamiento
+            {
+                Titulo = planDeEntrenamiento.Titulo,
+                Descripcion = planDeEntrenamiento.Descripcion,
+                Nivel = planDeEntrenamiento.Nivel,
+                TipoDisciplina = planDeEntrenamiento.TipoDisciplina,
+                FechaPublicacion = planDeEntrenamiento.FechaPublicacion,
+                MediaUrl = null,
+
+            };
+        }
+
+        //Model: CreatePostDto, Action: Post
+        public static Post MapCreatePostDtoToPost(this CreatePostDto createPostDto)
+        {
+            return new Post
+            {
+                Titulo = createPostDto.Titulo,
+                FechaPublicacion = createPostDto.FechaPublicacion,
+                Cuerpo = createPostDto.Cuerpo,
+                MediaUrl = null
+            };
+        }
+
         //Model: DescripcionObjetivosDto 
         public static DescripcionObjetivos MapDescripcionObjetivosDtoToDescripcionObjetivos(this DescripcionObjetivosDto descripcionObjetivosDto) 
         {
@@ -177,7 +205,8 @@ namespace c19_38_BackEnd.Map
                 FechaPublicacion = plan.FechaPublicacion,
                 IdAutorUsuario = plan.IdAutorUsuario,
                 Nivel = plan.Nivel,
-                TipoDisciplina = plan.TipoDisciplina
+                TipoDisciplina = plan.TipoDisciplina,
+                MediaUrl = plan.MediaUrl,
             };
         }
         public static PlanDeEntrenamiento MapPlanDeEntrenamientoDtoToPlanDeEntrenamiento( this PlanDeEntrenamientoDto plan)
@@ -189,7 +218,8 @@ namespace c19_38_BackEnd.Map
                 FechaPublicacion = plan.FechaPublicacion,
                 IdAutorUsuario = plan.IdAutorUsuario,
                 Nivel = plan.Nivel,
-                TipoDisciplina = plan.TipoDisciplina
+                TipoDisciplina = plan.TipoDisciplina,
+                MediaUrl = plan.MediaUrl
             };
         }
         public static List<PlanDeEntrenamiento> MapListPlanDeEntrenamientoDtoToListPlanDeEntrenamiento(this List<PlanDeEntrenamientoDto> plan)

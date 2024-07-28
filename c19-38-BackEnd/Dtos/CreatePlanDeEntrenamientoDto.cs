@@ -2,15 +2,14 @@
 
 namespace c19_38_BackEnd.Dtos
 {
-    public class PlanDeEntrenamientoDto
+    public class CreatePlanDeEntrenamientoDto
     {
-        public int IdPlan { get; set; }
         public string Titulo { get; set; }
         public string Descripcion { get; set; }
         public Disciplina TipoDisciplina { get; set; }
         public Nivel Nivel { get; set; }
         public DateTime FechaPublicacion { get; set; }
         public int IdAutorUsuario { get; set; }
-        public string? MediaUrl { get; set; }
+        public IFormFile? MediaUrl { get; set; }
     }
 }

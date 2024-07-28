@@ -1,7 +1,9 @@
-﻿using c19_38_BackEnd.Dtos;
+﻿using c19_38_BackEnd.Configuracion;
+using c19_38_BackEnd.Dtos;
 using c19_38_BackEnd.Interfaces;
 using c19_38_BackEnd.Map;
 using c19_38_BackEnd.Modelos;
+using c19_38_BackEnd.Servicios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +13,13 @@ namespace c19_38_BackEnd.Controllers
     [ApiController]
     public class PlanDeEntrenamientoController : ControllerBase
     {
-       private readonly IRepository<PlanDeEntrenamiento> _repository;
+        private readonly IRepository<PlanDeEntrenamiento> _repository;
+        private readonly ICloudMediaService _cloudMediaService;
 
-        public PlanDeEntrenamientoController(IRepository<PlanDeEntrenamiento> repository)
+        public PlanDeEntrenamientoController(IRepository<PlanDeEntrenamiento> repository, ICloudMediaService cloudMediaService)
         {
             _repository = repository;
+            _cloudMediaService = cloudMediaService;
         }
 
         [AllowAnonymous]
@@ -84,47 +88,53 @@ namespace c19_38_BackEnd.Controllers
             return planes.Skip(pagina - 1).Take(10).ToList();
         }
 
-        [Authorize]
-        [ProducesResponseType(500)]
-        [ProducesResponseType(201)]
-        [ProducesResponseType(203)]
-        [ProducesResponseType(400, Type = typeof(ProblemDetails))]
-        [HttpPost("RegistroPlanDeEntrenamiento")]
-        public async Task<IActionResult> RegistroPlanDeEntrenamiento([FromBody] PlanDeEntrenamientoDto planDeEntrenamientoDto)
+        [Authorize(Policy = Roles.Entrenador)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPost("CreatePlanDeEntrenamiento")]
+        public async Task<IActionResult> CreatePlanDeEntrenamiento([FromForm] CreatePlanDeEntrenamientoDto createPlanDeEntrenamientoDto)
         {
-            if (!ModelState.IsValid)
+            var userIdClaim = User.Claims.First(c => c.Type == "id");
+
+            var planToCreate = createPlanDeEntrenamientoDto.MapCreatePlanDeEntrnamientoDtoToPlanDeEntrenamiento();
+            if (createPlanDeEntrenamientoDto.MediaUrl is not null || createPlanDeEntrenamientoDto.MediaUrl.Length > 0)
             {
-                return BadRequest(ModelState);
+                var url = await _cloudMediaService.SubirFotoPerfil(createPlanDeEntrenamientoDto.MediaUrl);
+                if (url is not null)
+                {
+                    planToCreate.MediaUrl = url;
+                }
             }
+            planToCreate.IdAutorUsuario = int.Parse(userIdClaim.Value);
             try
             {
-                var plan = Mapper.MapPlanDeEntrenamientoDtoToPlanDeEntrenamiento(planDeEntrenamientoDto);
-                await _repository.AddAsync(plan);
+                await _repository.AddAsync(planToCreate);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetPlanDeEntrenamiento), new { id = plan.IdPlan }, planDeEntrenamientoDto);
-
             }
-            catch (Exception ex)
+            catch
             {
-
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error saving the PlanDeEntrenamiento to the database");
+                return StatusCode(500);
             }
+
+            return Ok();
         }
 
-        [Authorize]
-        [HttpPut("{id}", Name = "PutPlanDeEntrenamiento")]
-        [ProducesResponseType(201, Type = typeof(PlanDeEntrenamientoDto))]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PutPlanDeEntrenamiento(int id, [FromBody] PlanDeEntrenamientoDto planDeEntrenamientoDto)
-        {
-            var plan = Mapper.MapPlanDeEntrenamientoDtoToPlanDeEntrenamiento(planDeEntrenamientoDto);
-            await _repository.EditAsync(plan, id);
-            await _repository.SaveChangesAsync();
-            return NoContent();
-        }
+
+        //[Authorize]
+        //[HttpPut("{id}", Name = "PutPlanDeEntrenamiento")]
+        //[ProducesResponseType(201, Type = typeof(PlanDeEntrenamientoDto))]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public async Task<IActionResult> PutPlanDeEntrenamiento(int id, [FromBody] PlanDeEntrenamientoDto planDeEntrenamientoDto)
+        //{
+        //    var plan = Mapper.MapPlanDeEntrenamientoDtoToPlanDeEntrenamiento(planDeEntrenamientoDto);
+        //    await _repository.EditAsync(plan, id);
+        //    await _repository.SaveChangesAsync();
+        //    return NoContent();
+        //}
 
         [HttpDelete("{id}", Name = "DeletePlanDeEntrenamiento")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

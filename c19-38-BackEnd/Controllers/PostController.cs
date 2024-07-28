@@ -2,7 +2,10 @@
 using c19_38_BackEnd.Interfaces;
 using c19_38_BackEnd.Map;
 using c19_38_BackEnd.Modelos;
+using c19_38_BackEnd.Servicios;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace c19_38_BackEnd.Controllers
@@ -12,10 +15,12 @@ namespace c19_38_BackEnd.Controllers
     public class PostController : ControllerBase
     {
         private readonly IRepository<Post> _repository;
+        private readonly ICloudMediaService _cloudMediaService;
 
-        public PostController(IRepository<Post> repository)
+        public PostController(IRepository<Post> repository, ICloudMediaService cloudMediaService)
         {
             _repository = repository;
+            _cloudMediaService = cloudMediaService;
         }
 
         [AllowAnonymous]
@@ -38,7 +43,7 @@ namespace c19_38_BackEnd.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Post>>> GetPost(int id)
+        public async Task<ActionResult<IEnumerable<PostDto>>> GetPost(int id)
         {
             var post = await _repository.GetByIdAsync(id);
             if (post == null)
@@ -50,58 +55,74 @@ namespace c19_38_BackEnd.Controllers
         }
 
         [Authorize]
-        [ProducesResponseType(500)]
-        [ProducesResponseType(201)]
-        [ProducesResponseType(203)]
-        [ProducesResponseType(400, Type = typeof(ProblemDetails))]
-        [HttpPost("RegistroPost")]
-        public async Task<IActionResult> RegistroPost([FromBody] PostDto postDto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPost("CretePost")]
+        public async Task<IActionResult> CreatePost([FromForm] CreatePostDto createPostDto)
         {
-            if (!ModelState.IsValid)
+            var userIdClaim = User.Claims.First(c => c.Type == "id");
+
+            var postToCreate = createPostDto.MapCreatePostDtoToPost();
+            if (createPostDto.MediaUrl is not null || createPostDto.MediaUrl.Length > 0)
             {
-                return BadRequest(ModelState);
+                var url = await _cloudMediaService.SubirFotoPerfil(createPostDto.MediaUrl);
+                if (url is not null)
+                {
+                    postToCreate.MediaUrl = url;
+                }
+            }
+            postToCreate.IdAutorUsuario = int.Parse(userIdClaim.Value);
+            try
+            {
+                await _repository.AddAsync(postToCreate);
+                await _repository.SaveChangesAsync();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }           
+
+            return Ok();
+        }
+
+        //[Authorize]
+        //[HttpPut("{id}", Name = "PutPost")]
+        //[ProducesResponseType(201, Type = typeof(PostDto))]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public async Task<IActionResult> Put(int id, [FromBody] PostDto postDto)
+        //{
+        //    var post = Mapper.MapPostDtoToPost(postDto);
+        //    await _repository.EditAsync(post, id);
+        //    await _repository.SaveChangesAsync();
+        //    return NoContent();
+        //}
+
+        [HttpDelete("{idPost}", Name = "DeletePost")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeletePost(int idPost)
+        {
+            var postToDelete = await _repository.GetByIdAsync(idPost);
+            if(postToDelete is null)
+            {
+                return BadRequest();
             }
             try
             {
-                var post = Mapper.MapPostDtoToPost(postDto);
-                await _repository.AddAsync(post);
+                await _repository.DeleteAsync(idPost);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetPost), new { id = postDto.IdPost }, postDto);
-
             }
-            catch (Exception ex)
+            catch
             {
-
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error saving the post to the database");
+                return StatusCode(500);
             }
-        }
-
-        [Authorize]
-        [HttpPut("{id}", Name = "PutPost")]
-        [ProducesResponseType(201, Type = typeof(PostDto))]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, [FromBody] PostDto postDto)
-        {
-            var post = Mapper.MapPostDtoToPost(postDto);
-            await _repository.EditAsync(post, id);
-            await _repository.SaveChangesAsync();
-            return NoContent();
-        }
-
-        [HttpDelete("{id}", Name = "DeletePost")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeletePost(int id)
-        {
-            await _repository.DeleteAsync(id);
-            await _repository.SaveChangesAsync();
-            return NoContent();
+            return Ok();
+            
         }
     }
 }
