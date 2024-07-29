@@ -15,12 +15,17 @@ namespace c19_38_BackEnd.Controllers
     public class PostController : ControllerBase
     {
         private readonly IRepository<Post> _repository;
+        private readonly IRepository<Comentario> _repositoryComment;
+        private readonly IRepository<Usuario> _repositoryUsuario;
         private readonly ICloudMediaService _cloudMediaService;
 
-        public PostController(IRepository<Post> repository, ICloudMediaService cloudMediaService)
+        public PostController(IRepository<Post> repository, ICloudMediaService cloudMediaService,
+            IRepository<Comentario> repositoryComment, IRepository<Usuario> repositoryUsuario)
         {
             _repository = repository;
             _cloudMediaService = cloudMediaService;
+            _repositoryComment = repositoryComment;
+            _repositoryUsuario = repositoryUsuario;
         }
 
         [AllowAnonymous]
@@ -35,12 +40,18 @@ namespace c19_38_BackEnd.Controllers
                 return NotFound();
             }
             var postDto = post.Select(p =>Mapper.MapPostToPostDto(p)).ToList();
+            foreach(var item in postDto)
+            {
+                item.Comentarios = [];
+                item.Usuario = (await _repositoryUsuario.GetByIdAsync(item.IdAutorUsuario)).MapUsuarioToUsuarioPostComentarioDto();
+            }
             return Ok(postDto);
         }
 
+        
+
         [HttpGet("{id}", Name = "getPost")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK,Type =typeof(PostDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<PostDto>>> GetPost(int id)
@@ -51,6 +62,15 @@ namespace c19_38_BackEnd.Controllers
                 return NotFound();
             }
             var postDto = Mapper.MapPostToPostDto(post);
+            postDto.Usuario = (await _repositoryUsuario.GetByIdAsync(postDto.IdAutorUsuario)).MapUsuarioToUsuarioPostComentarioDto();
+            postDto.Comentarios = new List<ComentarioDto>();
+            var comments = (await _repositoryComment.GetAllAsync()).Where(c=>c.IdPost == id).ToList();
+
+            var commentsDto = comments.MapListComentarioToListComentarioDto();
+            foreach(var comment in commentsDto)
+            {
+                comment.Usuario = (await _repositoryUsuario.GetByIdAsync(comment.IdAutor)).MapUsuarioToUsuarioPostComentarioDto();
+            }
             return Ok(postDto);
         }
 

@@ -2,6 +2,7 @@
 using c19_38_BackEnd.Interfaces;
 using c19_38_BackEnd.Map;
 using c19_38_BackEnd.Modelos;
+using c19_38_BackEnd.Servicios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,65 +34,63 @@ namespace c19_38_BackEnd.Controllers
             return Ok(comentarioDto);
         }
 
-        [HttpGet("{id}", Name = "getComentario")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<ComentarioDto>>> GetComentario(int id)
-        {
-            var comentario = await _repository.GetByIdAsync(id);
-            if (comentario == null)
-            {
-                return NotFound();
-            }
-            var comentarioDto = Mapper.MapComentarioToComentarioDto(comentario);
-            return Ok(comentarioDto);
-        }
+        //[HttpGet("{id}", Name = "getComentario")]
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<ActionResult<IEnumerable<ComentarioDto>>> GetComentario(int id)
+        //{
+        //    var comentario = await _repository.GetByIdAsync(id);
+        //    if (comentario == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var comentarioDto = Mapper.MapComentarioToComentarioDto(comentario);
+        //    return Ok(comentarioDto);
+        //}
 
         [Authorize]
-        [ProducesResponseType(500)]
-        [ProducesResponseType(201)]
-        [ProducesResponseType(203)]
-        [ProducesResponseType(400, Type = typeof(ProblemDetails))]
-        [HttpPost("RegistroComentario")]
-        public async Task<IActionResult> RegistroEjercicio([FromBody] ComentarioDto comentarioDto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ProblemDetails))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPost("CretePost")]
+        public async Task<IActionResult> CreateCooment([FromBody] CreateComentarioDto createCommentDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var userIdClaim = User.Claims.First(c => c.Type == "id");
+
+            var commentToCreate = createCommentDto.MapCreateComentarioDtoToComentario();
+            commentToCreate.IdAutor = int.Parse(userIdClaim.Value);
             try
             {
-                var comentario = Mapper.MapComentarioDtoToComentario(comentarioDto);
-                await _repository.AddAsync(comentario);
+                await _repository.AddAsync(commentToCreate);
                 await _repository.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetComentario), new { id = comentario.IdComentario }, comentarioDto);
-
             }
-            catch (Exception ex)
+            catch
             {
-
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error saving the comentario to the database");
+                return StatusCode(500);
             }
+
+            return Ok();
         }
 
+
+        //[Authorize]
+        //[HttpPut("{id}", Name = "PutComentario")]
+        //[ProducesResponseType(201, Type = typeof(ComentarioDto))]
+        //[ProducesResponseType(StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public async Task<IActionResult> PutComentario(int id, [FromBody] ComentarioDto comentarioDto)
+        //{
+        //    var comentario = Mapper.MapComentarioDtoToComentario(comentarioDto);
+        //    await _repository.EditAsync(comentario, id);
+        //    await _repository.SaveChangesAsync();
+        //    return NoContent();
+        //}
 
         [Authorize]
-        [HttpPut("{id}", Name = "PutComentario")]
-        [ProducesResponseType(201, Type = typeof(ComentarioDto))]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PutComentario(int id, [FromBody] ComentarioDto comentarioDto)
-        {
-            var comentario = Mapper.MapComentarioDtoToComentario(comentarioDto);
-            await _repository.EditAsync(comentario, id);
-            await _repository.SaveChangesAsync();
-            return NoContent();
-        }
-
         [HttpDelete("{id}", Name = "DeleteComentario")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

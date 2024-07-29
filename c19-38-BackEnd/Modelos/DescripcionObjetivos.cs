@@ -11,8 +11,6 @@ namespace c19_38_BackEnd.Modelos
         public string Motivacion { get; set; }
         public string MayorObstaculo { get; set; }
         public LugarEntrenamiento LugarEntrenamiento { get; set; }
-        public string EquiposEnCasa { get; set; }
-        public string Objetivo { get; set; }
         public PreferenciaHora PreferenciaHora { get; set; }
         [ForeignKey(nameof(IdUsuario))]
         public Usuario Usuario { get; set; }

@@ -12,13 +12,17 @@ namespace c19_38_BackEnd.Servicios
     {
         public static IEnumerable<Claim> ObtenerClaims(Usuario usuario, string rol)
         {
-            return new List<Claim>()
+            var myListClaims = new List<Claim>()
             {
                 new Claim("id",usuario.Id.ToString()),
                 new Claim("name",usuario.Nombre),
                 new Claim("email",usuario.Email),
-                new Claim("rol",rol)
             };
+            if(!rol.IsNullOrEmpty())
+            {
+                myListClaims.Add(new Claim("rol", rol));
+            }
+            return myListClaims;
         }
 
         public static string GenerarJwt(Usuario usuario,string rol,JwtSettings jwtSettings)

@@ -222,10 +222,6 @@ namespace c19_38_BackEnd.Migrations
                     b.Property<int>("ActividadFisica")
                         .HasColumnType("int");
 
-                    b.Property<string>("EquiposEnCasa")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("IdUsuario")
                         .HasColumnType("int");
 
@@ -237,10 +233,6 @@ namespace c19_38_BackEnd.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Motivacion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Objetivo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

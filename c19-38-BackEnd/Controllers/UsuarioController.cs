@@ -116,30 +116,6 @@ namespace c19_38_BackEnd.Controllers
             return Ok() ;
         }
 
-        [Authorize]
-        [HttpPost("usuario/DescripcionObjetivos/{idUsuario}",Name ="PostDescripcionObjetivos")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostDescripcion([FromRoute]int idUsuario, [FromBody] DescripcionObjetivosDto descripcion)
-        {
-            if(!EsEsteElUsuario(User,idUsuario))
-                return BadRequest("Id invalido");
-            var descripcionObjetivos = descripcion.MapDescripcionObjetivosDtoToDescripcionObjetivos();
-            descripcionObjetivos.IdUsuario = idUsuario;
-            try
-            {
-                await _repositoryDesc.AddAsync(descripcionObjetivos);
-                await _repository.SaveChangesAsync();
-            }
-            catch
-            {
-                return StatusCode(500);
-            }
-            return Ok();
-
-        }
         [NonAction]
         public bool EsEsteElUsuario(ClaimsPrincipal claimsPrincipal,int id)
         {

@@ -7,5 +7,13 @@
         public int IdPost { get; set; }
         public int IdAutor { get; set; }
         public DateTime FechaPublicacion { get; set; }
+        public UsuarioPostComentarioDto Usuario {  get; set; }
+    }
+
+    public class CreateComentarioDto
+    {
+        public string Cuerpo { get; set; }
+        public int IdPost { get; set; }
+        public DateTime FechaPublicacion { get; set; }
     }
 }

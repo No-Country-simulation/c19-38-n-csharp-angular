@@ -6,6 +6,27 @@ namespace c19_38_BackEnd.Map
 {
     public static class Mapper
     {
+        //Model: UsuarioPostComentarioDto
+        public static UsuarioPostComentarioDto MapUsuarioToUsuarioPostComentarioDto(this Usuario usuario)
+        {
+            return new UsuarioPostComentarioDto
+            {
+                FullName = string.Concat(usuario.Nombre," ", usuario.Apellido),
+                Id = usuario.Id,
+                MediaUrl = usuario.MediaUrl
+            };
+        }
+
+        //Model: CreateComentario, Action: Post
+        public static Comentario MapCreateComentarioDtoToComentario(this CreateComentarioDto createComentarioDto)
+        {
+            return new Comentario
+            {
+                Cuerpo = createComentarioDto.Cuerpo,
+                FechaPublicacion = createComentarioDto.FechaPublicacion,
+                IdPost = createComentarioDto.IdPost,
+            };
+        }
 
         //Model: CreatePlanDeEntrenamientoDto, Action: Post
 
@@ -41,11 +62,9 @@ namespace c19_38_BackEnd.Map
             return new DescripcionObjetivos
             {
                 ActividadFisica = descripcionObjetivosDto.ActividadFisica,
-                EquiposEnCasa = descripcionObjetivosDto.EquiposEnCasa,
                 LugarEntrenamiento = descripcionObjetivosDto.LugarEntrenamiento,
                 MayorObstaculo = descripcionObjetivosDto.MayorObstaculo,
                 Motivacion = descripcionObjetivosDto.Motivacion,
-                Objetivo = descripcionObjetivosDto.Objetivo,
                 PreferenciaHora = descripcionObjetivosDto.PreferenciaHora
             };
         }

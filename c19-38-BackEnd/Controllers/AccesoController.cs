@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace c19_38_BackEnd.Controllers
 {
@@ -16,19 +18,22 @@ namespace c19_38_BackEnd.Controllers
     public class AccesoController : ControllerBase
     {
         private readonly UserManager<Usuario> _userManager;
+        private readonly IRepository<DescripcionObjetivos> _repositoryDesc;
         private readonly SignInManager<Usuario> _signInManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly JwtSettings _settings;
         private readonly IRepository<Usuario> _repository;
 
         public AccesoController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager,
-            RoleManager<IdentityRole<int>> roleManager,JwtSettings settings,IRepository<Usuario> repository)
+            RoleManager<IdentityRole<int>> roleManager,JwtSettings settings,IRepository<Usuario> repository,
+            IRepository<DescripcionObjetivos> repositoryDesc)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _settings = settings;
             _repository = repository;
+            _repositoryDesc = repositoryDesc;
         }
 
         /// <summary>
@@ -56,13 +61,13 @@ namespace c19_38_BackEnd.Controllers
             {
                 return StatusCode(500);
             }
-            //Añade el rol segun si es entrenador o no.
-            var resultado = await _userManager.AddToRoleAsync(user, registroDto.EsEntrenador?Roles.Entrenador:Roles.Aprendiz);
+            ////Añade el rol segun si es entrenador o no.
+            //var resultado = await _userManager.AddToRoleAsync(user, registroDto.EsEntrenador?Roles.Entrenador:Roles.Aprendiz);
 
-            if(!resultado.Succeeded)
-            {
-                return StatusCode(500);
-            }
+            //if(!resultado.Succeeded)
+            //{
+            //    return StatusCode(500);
+            //}
 
             return Created();
         }
@@ -96,10 +101,61 @@ namespace c19_38_BackEnd.Controllers
             //Se obtiene el rol del usuario
             var roles = await _userManager.GetRolesAsync(usuario);
 
-            //Se obtiene el token junto con las claims necesarias
-            var tokenJwt = GeneradorDeJWT.GenerarJwt(usuario, roles[0], _settings);
+            string token;
+            if(roles.IsNullOrEmpty())
+            {
+                token = GeneradorDeJWT.GenerarJwt(usuario,string.Empty, _settings);
+            }
+            else
+            {
+                token = GeneradorDeJWT.GenerarJwt(usuario, roles[0], _settings);
+            }
 
-            return Ok(tokenJwt);
+            //Se obtiene el token junto con las claims necesarias
+            
+
+            return Ok(token);
+        }
+
+        [Authorize]
+        [HttpPost("descripcionObjetivos", Name = "PostDescripcionObjetivos")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PostDescripcion([FromBody] DescripcionObjetivosDto descripcion)
+        {
+            var userIdClaim = int.Parse(User.Claims.First(c => c.Type == "id").Value);
+            var descripcionObjetivos = descripcion.MapDescripcionObjetivosDtoToDescripcionObjetivos();
+            descripcionObjetivos.IdUsuario = userIdClaim;
+
+            //Busca al usuario que tenga el email proporcionado
+            var usuario = await _repository.GetByIdAsync(userIdClaim);
+            //Añade el rol segun si es entrenador o no.
+            var resultado = await _userManager.AddToRoleAsync(usuario, descripcion.EsEntrenador ? Roles.Entrenador : Roles.Aprendiz);
+
+            if (!resultado.Succeeded)
+            {
+                return StatusCode(500);
+            }
+
+            try
+            {
+                await _repositoryDesc.AddAsync(descripcionObjetivos);
+                await _repository.SaveChangesAsync();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+            return Ok();
+
+        }
+        [NonAction]
+        public bool EsEsteElUsuario(ClaimsPrincipal claimsPrincipal, int id)
+        {
+            var userIdClaim = User.Claims.First(c => c.Type == "id");
+            return int.Parse(userIdClaim.Value) == id;
         }
     }
 }

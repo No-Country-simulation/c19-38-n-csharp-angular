@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace c19_38_BackEnd.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDb : Migration
+    public partial class initDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,8 +38,7 @@ namespace c19_38_BackEnd.Migrations
                     FechaDeNac = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Peso = table.Column<float>(type: "real", nullable: false),
                     Altura = table.Column<float>(type: "real", nullable: false),
-                    ActividadFisica = table.Column<int>(type: "int", nullable: false),
-                    MediaUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MediaUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Disciplina = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -184,6 +183,30 @@ namespace c19_38_BackEnd.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DescripcionObjetivos",
+                columns: table => new
+                {
+                    IdDescripcion = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdUsuario = table.Column<int>(type: "int", nullable: false),
+                    Motivacion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MayorObstaculo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LugarEntrenamiento = table.Column<int>(type: "int", nullable: false),
+                    PreferenciaHora = table.Column<int>(type: "int", nullable: false),
+                    ActividadFisica = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DescripcionObjetivos", x => x.IdDescripcion);
+                    table.ForeignKey(
+                        name: "FK_DescripcionObjetivos_AspNetUsers_IdUsuario",
+                        column: x => x.IdUsuario,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HistorialRendimientos",
                 columns: table => new
                 {
@@ -213,10 +236,12 @@ namespace c19_38_BackEnd.Migrations
                 {
                     IdPlan = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TipoDisciplina = table.Column<int>(type: "int", nullable: false),
                     Nivel = table.Column<int>(type: "int", nullable: false),
                     FechaPublicacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MediaUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdAutorUsuario = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -399,6 +424,11 @@ namespace c19_38_BackEnd.Migrations
                 column: "IdPost");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DescripcionObjetivos_IdUsuario",
+                table: "DescripcionObjetivos",
+                column: "IdUsuario");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_HistorialRendimientos_IdUsuario",
                 table: "HistorialRendimientos",
                 column: "IdUsuario");
@@ -447,6 +477,9 @@ namespace c19_38_BackEnd.Migrations
 
             migrationBuilder.DropTable(
                 name: "Comentarios");
+
+            migrationBuilder.DropTable(
+                name: "DescripcionObjetivos");
 
             migrationBuilder.DropTable(
                 name: "HistorialRendimientos");

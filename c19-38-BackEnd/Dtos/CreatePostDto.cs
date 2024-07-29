@@ -6,6 +6,5 @@
         public string Cuerpo { get; set; }
         public DateTime FechaPublicacion { get; set; }
         public IFormFile? MediaUrl { get; set; }
-        public int IdAutorUsuario { get; set; }
     }
 }

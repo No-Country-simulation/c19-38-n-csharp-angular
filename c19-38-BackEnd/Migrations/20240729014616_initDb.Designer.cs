@@ -12,8 +12,8 @@ using c19_38_BackEnd.Datos;
 namespace c19_38_BackEnd.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    [Migration("20240721181031_InitDb")]
-    partial class InitDb
+    [Migration("20240729014616_initDb")]
+    partial class initDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -214,6 +214,41 @@ namespace c19_38_BackEnd.Migrations
                     b.ToTable("Comentarios");
                 });
 
+            modelBuilder.Entity("c19_38_BackEnd.Modelos.DescripcionObjetivos", b =>
+                {
+                    b.Property<int>("IdDescripcion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdDescripcion"));
+
+                    b.Property<int>("ActividadFisica")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LugarEntrenamiento")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MayorObstaculo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Motivacion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PreferenciaHora")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdDescripcion");
+
+                    b.HasIndex("IdUsuario");
+
+                    b.ToTable("DescripcionObjetivos");
+                });
+
             modelBuilder.Entity("c19_38_BackEnd.Modelos.Ejercicio", b =>
                 {
                     b.Property<int>("IdEjercicio")
@@ -294,11 +329,18 @@ namespace c19_38_BackEnd.Migrations
                     b.Property<int>("IdAutorUsuario")
                         .HasColumnType("int");
 
+                    b.Property<string>("MediaUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Nivel")
                         .HasColumnType("int");
 
                     b.Property<int>("TipoDisciplina")
                         .HasColumnType("int");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdPlan");
 
@@ -389,9 +431,6 @@ namespace c19_38_BackEnd.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("ActividadFisica")
-                        .HasColumnType("int");
-
                     b.Property<float>("Altura")
                         .HasColumnType("real");
 
@@ -426,6 +465,7 @@ namespace c19_38_BackEnd.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("MediaUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
@@ -562,6 +602,17 @@ namespace c19_38_BackEnd.Migrations
                     b.Navigation("Autor");
 
                     b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("c19_38_BackEnd.Modelos.DescripcionObjetivos", b =>
+                {
+                    b.HasOne("c19_38_BackEnd.Modelos.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("c19_38_BackEnd.Modelos.HistorialRendimiento", b =>
