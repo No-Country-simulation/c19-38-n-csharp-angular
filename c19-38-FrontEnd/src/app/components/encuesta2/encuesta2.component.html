@@ -1,1 +1,106 @@
-<p>encuesta2 works!</p>
+
+<!--NAVBAR-->
+
+<nav class="bg-white border-b-4 border-[#2D3648] mb-4 p-4">
+    <div class="flex justify-between items-center">
+        <div class="logo bg-[#2D3648] text-white text-2xl py-2 px-12">Logo</div>
+        <div class="tabs flex space-x-11 relative">
+          <a [routerLink]="['/home']" class="tab text-[#2D3648]">Inicio</a>
+            <div class="relative group">
+                <a href="#" class="tab text-[#2D3648] flex items-center relative">
+                    Rutinas <span class="ml-1">&#9660;</span>
+                </a>
+                <div class="submenu absolute hidden group-hover:block bg-white border border-[#2D3648] mt-2 w-48 transition duration-300 ease-in-out">
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Rutinas</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Tips de nutrición</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Entrenando en casa</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Yoga</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Cardio</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Musculación</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">GAP</a>
+                </div>
+            </div>
+            <a href="#" class="tab text-[#2D3648]">Mis Rutinas</a>
+            <a href="#" class="tab text-[#2D3648]">Comunidad Fitness</a>
+            <a href="#" class="tab text-[#2D3648]">Producto</a>
+        </div>
+        <div class="buttons space-x-2">
+            
+            <a class="btn2 border-2 border-[#2D3648] bg-[#2D3648] text-white py-2 px-3 font-bold" [routerLink]="'/signin'">Sumate</a>
+        </div>
+    </div>
+  </nav>
+  
+    
+  <!--SECTION CARDS-->
+  
+  <div class="flex justify-between items-center p-4">
+    <!-- Imagen en el lado izquierdo -->
+    <div class="w-1/2 text-center">
+      <img src="assets/encuesta2.png" alt="Large Image" class="w-[579px] h-[579px] object-contain mx-auto">
+    </div>
+  
+    <!-- Sección de las cards en el lado derecho -->
+    <div class="flex flex-col items-center w-1/2 space-y-4">
+      <h1 class="text-[#2D3648] text-2xl font-bold text-center mb-4">¿Cuál es tu objetivo?</h1>
+      <div class="card flex bg-white border shadow p-4 w-full max-w-xl rounded-lg cursor-pointer" (click)="navigateTo('encuesta3')">
+        <img src="assets/masa.png" alt="Ganar masa muscular" class="image">
+        <div class="ml-4 flex flex-col justify-center text-center">
+          <h3 class="text-lg font-bold text-[#2D3648]">Ganar masa muscular</h3>
+        </div>
+      </div>
+      <div class="card flex bg-white border shadow p-4 w-full max-w-xl rounded-lg cursor-pointer" (click)="navigateTo('encuesta3')">
+        <img src="assets/peso.png" alt="Perdida de peso" class="image">
+        <div class="ml-4 flex flex-col justify-center text-center">
+          <h3 class="text-lg font-bold text-[#2D3648]">Perdida de peso</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  <!--FOOTER-->
+  <footer class="bg-[#2D3648] text-white p-4">
+    <div class="grid grid-cols-4 gap-8">
+      <div>
+        <div class="text-2xl mb-2">Logo</div>
+        
+      </div>
+      <div>
+        <h4 class="text-xl mb-2">Mapa del sitio</h4>
+        <ul class="space-y-1">
+          <li>About us</li>
+          <li>Services</li>
+          <li>Blog</li>
+          <li>Contact us</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xl mb-2">PRODUCT</h4>
+        <ul class="space-y-1">
+          <li>Pricing</li>
+          <li>Featuring</li>
+          <li>Customers</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xl mb-2">HELP</h4>
+        <ul class="space-y-1">
+          <li>Getting started</li>
+          <li>Network status</li>
+          <li>FAQs</li>
+          <li>Referral program</li>
+        </ul>
+      </div>
+    </div>
+    <div class="flex justify-center mt-4 space-x-4">
+      <i class="fab fa-facebook"></i>
+      <i class="fab fa-twitter"></i>
+      <i class="fab fa-instagram"></i>
+    </div>
+    <div class="text-center mt-4">
+      <p>&#64; 2024 Name of the company</p>
+    </div>
+  </footer>
+  
