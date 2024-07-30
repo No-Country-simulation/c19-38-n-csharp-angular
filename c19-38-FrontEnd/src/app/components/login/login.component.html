@@ -1,9 +1,8 @@
-<!-- Navbar -->
 <nav class="bg-white border-b-4 border-[#2D3648] mb-4 p-4">
     <div class="flex justify-between items-center">
         <div class="logo bg-[#2D3648] text-white text-2xl py-2 px-12">Logo</div>
         <div class="tabs flex space-x-11 relative">
-            <a href="#" class="tab text-[#2D3648]">Inicio</a>
+          <a [routerLink]="['/home']" class="tab text-[#2D3648]">Inicio</a>
             <div class="relative group">
                 <a href="#" class="tab text-[#2D3648] flex items-center relative">
                     Rutinas <span class="ml-1">&#9660;</span>
@@ -22,11 +21,11 @@
             <a href="#" class="tab text-[#2D3648]">Producto</a>
         </div>
         <div class="buttons space-x-2">
-            <button class="btn border-2 border-[#2D3648] text-[#2D3648] py-2 px-3 font-bold">Iniciar sesión</button>
-            <button class="btn2 border-2 border-[#2D3648] bg-[#2D3648] text-white py-2 px-3 font-bold">Sumate</button>
+            <a class="btn border-2 border-[#2D3648] text-[#2D3648] py-2 px-3 font-bold" [routerLink]="'/login'">Iniciar sesión</a>
+            <a class="btn2 border-2 border-[#2D3648] bg-[#2D3648] text-white py-2 px-3 font-bold" [routerLink]="'/signin'">Sumate</a>
         </div>
     </div>
-</nav>
+  </nav>
 
 <!-- Sección de Iniciar Sesión -->
 <section class="flex flex-wrap justify-between items-center px-12 py-16 bg-gray-100">
@@ -56,7 +55,9 @@
             <a href="#" class="text-sm text-[#00567F] hover:text-[#003c54] block mb-4 text-left">¿Olvidaste tu contraseña?</a>
             <button type="submit" class="w-full bg-[#0091D6] text-white py-2 px-4 rounded-lg font-bold hover:bg-[#0077b6] transition">Iniciar sesión</button>
         </form>
-        <p class="mt-4 text-gray-600 text-center">¿Aún no tienes cuenta? <a href="#" class="text-[#2D3648] font-semibold hover:text-[#00567F]">Regístrate</a></p>
+        <p class="mt-4 text-gray-600 text-center">¿Aún no tienes cuenta? <a href="#" class="text-[#2D3648] font-semibold hover:text-[#00567F]" [routerLink]="'/signin'">Regístrate</a></p>
+
+
     </div>
     <!-- Imagen de inicio de sesión -->
     <div class="w-full md:w-1/2">

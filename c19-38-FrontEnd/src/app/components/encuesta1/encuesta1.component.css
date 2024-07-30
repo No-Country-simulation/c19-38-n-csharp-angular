@@ -1,3 +1,10 @@
+/* General styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  font-size: 16px; /* Base font size */
+}
+
 /* Navbar styles */
 .navbar {
   display: flex;
@@ -6,38 +13,117 @@
   padding: 10px 20px;
   background-color: #ffffff;
   border-bottom: 4px solid #2D3648;
-  margin-bottom: 20px;
 }
 
-.logo {
-  color: #2D3648;
-  font-size: 24px;
+.logo {margin-left: 3.8rem;
+  background-color: #2D3648;
+  color: #ffffff;
+  font-size: 1.5rem; /* Font size relative to base */
+  padding: 10px 20px;
+  border-radius: 7px;
 }
 
-.tabs .tab {
-  margin: 0 10px;
+.tabs {
+  margin-left: 7rem;
+  display: flex;
+  gap: 1rem; /* Responsive gap */
+}
+
+.tab {
   color: #2D3648;
+  font-size: 1.4rem;
   text-decoration: none;
+  position: relative;
+  transition: color 0.3s;
 }
 
-.buttons .btn {
-  margin-left: 10px;
-  padding: 5px 10px;
+.tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 3px;
+  background-color: #2D3648;
+  transform: scaleX(0);
+  transition: transform 0.25s ease-out;
+}
+
+.tab:hover::after,
+.tab:focus::after {
+  transform: scaleX(1);
+}
+
+.submenu {
+  display: none;
+  position: absolute;
+  z-index: 50;
+  padding-top: 0.5rem;
+}
+
+.group:hover .submenu {
+  display: block;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 1;
+}
+
+/* Button styles */
+.buttons {
+  display: flex;
+  gap: 1rem;
+  margin-right: 7rem;
+}
+
+.btn, .btn2 {
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn {
   border: 2px solid #2D3648;
   background-color: #ffffff;
   color: #2D3648;
-  cursor: pointer;
 }
 
-.content {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
+.btn2 {
+  
+  border: 2px solid #ffffff;
+  background-color: #00567F;
+  color: #ffffff;
 }
 
+/* Estilos para la sección */
+section {
+  background-color: #ffffff;
+  margin: 3rem;
+  padding: 2rem;
+}
+
+section img {
+  width: 100%;
+  height: auto;
+}
+
+.objectives {
+  padding: 3rem;
+}
+
+.objectives h1 {
+  text-align: center;
+  font-size: 3rem;
+}
+
+.objectives p {
+  font-size: 1.25rem;
+}
+
+/* Estilos para las tarjetas */
 .cards {
   display: flex;
   width: 50%;
+  gap: 20px; /* Añade espacio entre las tarjetas */
 }
 
 .card {
@@ -46,6 +132,9 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin-right: 20px;
+  border-radius: 18px; /* Redondea los bordes */
+  text-align: center; /* Centra el texto */
+  color: #2D3648; /* Cambia el color del texto */
 }
 
 .card img {
@@ -53,6 +142,7 @@
   height: auto;
 }
 
+/* Contenedor de la imagen grande */
 .large-image-container {
   width: 50%;
   text-align: center;

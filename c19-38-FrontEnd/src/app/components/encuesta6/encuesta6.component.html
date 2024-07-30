@@ -1,1 +1,134 @@
-<p>encuesta6 works!</p>
+<!--NAVBAR-->
+<nav class="bg-white border-b-4 border-[#2D3648] mb-4 p-4">
+    <div class="flex justify-between items-center">
+        <div class="logo bg-[#2D3648] text-white text-2xl py-2 px-12">Logo</div>
+        <div class="tabs flex space-x-11 relative">
+            <a [routerLink]="['/home']" class="tab text-[#2D3648]">Inicio</a>
+            <div class="relative group">
+                <a href="#" class="tab text-[#2D3648] flex items-center relative">
+                    Rutinas <span class="ml-1">&#9660;</span>
+                </a>
+                <div class="submenu absolute hidden group-hover:block bg-white border border-[#2D3648] mt-2 w-48 transition duration-300 ease-in-out">
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Rutinas</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Tips de nutrición</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Entrenando en casa</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Yoga</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Cardio</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Musculación</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">GAP</a>
+                </div>
+            </div>
+            <a href="#" class="tab text-[#2D3648]">Mis Rutinas</a>
+            <a href="#" class="tab text-[#2D3648]">Comunidad Fitness</a>
+            <a href="#" class="tab text-[#2D3648]">Producto</a>
+        </div>
+        <div class="buttons space-x-2">
+            <a class="btn2 border-2 border-[#2D3648] bg-[#2D3648] text-white py-2 px-3 font-bold" [routerLink]="'/signin'">Sumate</a>
+        </div>
+    </div>
+</nav>
+
+<!--SECTION CARDS-->
+<div class="objectives flex p-4">
+    <!-- Imagen en el lado izquierdo -->
+    <div class="w-1/2 text-center">
+        <img src="assets/encuesta3.png" alt="Large Image" class="w-[579px] h-[579px] object-contain mx-auto">
+    </div>
+    
+    <!-- Contenido a la derecha -->
+    <div class="w-1/2 flex flex-col justify-start pl-4">
+        <!-- Título: Elija su lugar de entrenamiento -->
+        <h1 class="text-[#2D3648] text-2xl font-bold text-center mb-8">Elija su lugar de entrenamiento</h1>
+
+       <!-- Cards -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <!-- Card Casa -->
+            <div (click)="selectOption('casa')" [ngClass]="{'card-selected': selectedOption === 'casa'}" class="card rounded-lg shadow-md p-4 text-center cursor-pointer">
+                <img src="assets/casa.png" alt="Casa" class="w-full h-32 object-contain mb-2">
+                <div class="card-content text-[#2D3648] text-lg font-semibold">Casa</div>
+            </div>
+            
+            <!-- Card Gimnasio -->
+            <div (click)="selectOption('gimnasio')" [ngClass]="{'card-selected': selectedOption === 'gimnasio'}" class="card rounded-lg shadow-md p-4 text-center cursor-pointer">
+                <img src="assets/gimnasio.png" alt="Gimnasio" class="w-full h-32 object-contain mb-2">
+                <div class="card-content text-[#2D3648] text-lg font-semibold">Gimnasio</div>
+            </div>
+        </div>
+
+        <!-- Título: ¿Qué equipo tienes en casa? -->
+        <h1 class="text-[#2D3648] text-2xl font-bold text-center mb-4">¿Qué equipo tienes en casa?</h1>
+
+        <!-- Opciones de equipo en columnas de 2 -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <label class="flex items-center space-x-2">
+                <span>Mancuernas</span>
+                <input type="checkbox" [checked]="equipment['mancuernas']" (change)="toggleEquipment('mancuernas')" class="form-checkbox text-[#0091D6]">
+            </label>
+            <label class="flex items-center space-x-2">
+                <span>Bandas</span>
+                <input type="checkbox" [checked]="equipment['bandas']" (change)="toggleEquipment('bandas')" class="form-checkbox text-[#0091D6]">
+            </label>
+            <label class="flex items-center space-x-2">
+                <span>TRX</span>
+                <input type="checkbox" [checked]="equipment['trx']" (change)="toggleEquipment('trx')" class="form-checkbox text-[#0091D6]">
+            </label>
+            <label class="flex items-center space-x-2">
+                <span>Cinta de correr</span>
+                <input type="checkbox" [checked]="equipment['cinta']" (change)="toggleEquipment('cinta')" class="form-checkbox text-[#0091D6]">
+            </label>
+            <label class="flex items-center space-x-2">
+                <span>Bicicleta estática</span>
+                <input type="checkbox" [checked]="equipment['bicicleta']" (change)="toggleEquipment('bicicleta')" class="form-checkbox text-[#0091D6]">
+            </label>
+            <label class="flex items-center space-x-2">
+                <span>Barra con pesas</span>
+                <input type="checkbox" [checked]="equipment['barra']" (change)="toggleEquipment('barra')" class="form-checkbox text-[#0091D6]">
+            </label>
+            <label class="flex items-center space-x-2">
+                <span>Yoga mat</span>
+                <input type="checkbox" [checked]="equipment['yogaMat']" (change)="toggleEquipment('yogaMat')" class="form-checkbox text-[#0091D6]">
+            </label>
+            <label class="flex items-center space-x-2">
+                <span>Otro: <input type="text" [(ngModel)]="otherEquipment" class="form-input border-[#2D3648] rounded-md ml-2" placeholder="Especificar"></span>
+                <input type="checkbox" [checked]="equipment['otro']" (change)="toggleEquipment('otro')" class="form-checkbox text-[#0091D6]">
+            </label>
+        </div>
+
+        <!-- Botón -->
+        <button class="btn bg-[#2D3648] text-white py-2 px-6 font-bold rounded-lg mt-4" (click)="navigateTo('homeDeportista')">Continuar</button>
+    </div>
+</div>
+
+<!--FOOTER-->
+<footer class="bg-[#2D3648] text-white p-4 mt-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+            <div class="text-2xl mb-2">Logo</div>
+        </div>
+        <div>
+            <h4 class="text-xl mb-2">Mapa del sitio</h4>
+            <ul class="space-y-1">
+                <li>About us</li>
+                <li>Contact</li>
+                <li>Privacy Policy</li>
+                <li>Terms of Service</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-xl mb-2">Redes sociales</h4>
+            <ul class="space-y-1">
+                <li>Facebook</li>
+                <li>Instagram</li>
+                <li>Twitter</li>
+                <li>LinkedIn</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-xl mb-2">Contacto</h4>
+            <ul class="space-y-1">
+                <li>Email</li>
+                <li>Teléfono</li>
+            </ul>
+        </div>
+    </div>
+</footer>

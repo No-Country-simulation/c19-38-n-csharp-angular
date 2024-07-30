@@ -1,0 +1,305 @@
+/* General styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    border-bottom: 4px solid #2D3648;
+}
+
+.logo {
+    background-color: #2D3648;
+    color: #ffffff;
+    font-size: 1.5rem;
+    padding: 10px 20px;
+    border-radius: 7px;
+}
+
+.tabs {
+    display: flex;
+    gap: 1rem;
+}
+
+.tab {
+    color: #2D3648;
+    font-size: 1.4rem;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.tab::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background-color: #2D3648;
+    transform: scaleX(0);
+    transition: transform 0.25s ease-out;
+}
+
+.tab:hover::after,
+.tab:focus::after {
+    transform: scaleX(1);
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    z-index: 50;
+    padding-top: 0.5rem;
+}
+
+.group:hover .submenu {
+    display: block;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+}
+
+/* Button styles */
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn {
+    margin-top: 5rem !important;
+    border: 2px solid #2D3648;
+    background-color: #2D3648;
+    color: #ffffff;
+    padding: 10px 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Sección */
+
+section {
+    background-color: #ffffff;
+    margin: 3rem;
+    padding: 2rem;
+}
+
+section img {
+    width: 100%;
+    height: auto;
+}
+
+.textarea-small {
+    width: 454px;
+    height: 60px; /* Ajusta la altura según el contenido */
+    min-height: 50px; /* Ajusta la altura mínima para que no quede demasiado pequeño */
+    padding: 16px; /* Espaciado interno */
+    border: 2px solid #cfcfcf;
+    border-radius: 8px;
+    resize: vertical; /* Permite redimensionar solo en vertical si se desea */
+  }
+
+  .form-checkbox {
+    appearance: none;
+    width: 20px; /* Tamaño del checkbox */
+    height: 20px;
+    border-radius: 50%; /* Borde redondo completo */
+    border: 2px solid #0091D6; /* Color del borde */
+    background-color: #fff; /* Fondo blanco */
+    outline: none;
+    cursor: pointer;
+    margin-right: 8px; /* Espacio entre el checkbox y el texto */
+  }
+  
+  .form-checkbox:checked {
+    background-color: #0091D6; /* Color de fondo cuando está seleccionado */
+  }
+
+
+.objectives {
+    padding: 3rem;
+}
+
+.objectives h1 {
+    text-align: center;
+    font-size: 1.7rem;
+}
+
+.objectives textarea {
+    margin-bottom: 1rem; /* Espacio inferior para el textarea */
+  }
+
+
+
+/* Sección de texto y formulario */
+.large-image-container {
+    width: 50%;
+    text-align: center;
+}
+
+.large-image-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Flexbox para centrar verticalmente */
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.items-center {
+    align-items: center;
+}
+
+/* Footer styles */
+footer {
+    background-color: #2D3648;
+    color: #ffffff;
+    padding: 20px;
+}
+
+.footer-left {
+    float: left;
+}
+
+.footer-logo {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.footer-right {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    margin-right: 20px;
+}
+
+.footer-section h4 {
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 5px;
+}
+
+.social-icons i {
+    margin-right: 10px;
+}
+
+.footer-bottom {
+    clear: both;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.shadow {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .tabs {
+        margin-top: 1rem;
+        flex-direction: column;
+    }
+
+    .tab {
+        margin-bottom: 0.5rem;
+    }
+
+    .buttons {
+        margin-top: 1rem;
+        justify-content: center;
+    }
+
+    .objectives h1 {
+        font-size: 2rem;
+    }
+
+    .objectives p {
+        font-size: 1rem;
+        max-width: 100%;
+    }
+
+    .flex {
+        flex-direction: column;
+    }
+
+    .large-image-container {
+        width: 100%;
+    }
+
+    .card {
+        width: 100%;
+        height: auto;
+    }
+
+    .footer-left,
+    .footer-right {
+        float: none;
+        width: 100%;
+    }
+
+    .footer-section {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar .logo {
+        font-size: 1.25rem;
+        padding: 8px 10px;
+    }
+
+    .tabs {
+        margin-top: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .tab {
+        font-size: 1.2rem;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+    }
+
+    .objectives h1 {
+        font-size: 1.5rem;
+    }
+
+    .objectives p {
+        font-size: 0.875rem;
+    }
+
+    .footer-section h4 {
+        font-size: 1.25rem;
+    }
+}

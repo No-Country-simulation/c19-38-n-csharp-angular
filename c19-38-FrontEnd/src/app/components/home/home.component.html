@@ -2,7 +2,7 @@
   <div class="flex justify-between items-center">
       <div class="logo bg-[#2D3648] text-white text-2xl py-2 px-12">Logo</div>
       <div class="tabs flex space-x-11 relative">
-          <a href="#" class="tab text-[#2D3648]">Inicio</a>
+        <a [routerLink]="['/home']" class="tab text-[#2D3648]">Inicio</a>
           <div class="relative group">
               <a href="#" class="tab text-[#2D3648] flex items-center relative">
                   Rutinas <span class="ml-1">&#9660;</span>
@@ -22,7 +22,7 @@
       </div>
       <div class="buttons space-x-2">
           <a class="btn border-2 border-[#2D3648] text-[#2D3648] py-2 px-3 font-bold" [routerLink]="'/login'">Iniciar sesión</a>
-          <a class="btn2 border-2 border-[#2D3648] bg-[#2D3648] text-white py-2 px-3 font-bold">Sumate</a>
+          <a class="btn2 border-2 border-[#2D3648] bg-[#2D3648] text-white py-2 px-3 font-bold" [routerLink]="'/signin'">Sumate</a>
       </div>
   </div>
 </nav>
@@ -62,14 +62,14 @@
     <div class="w-full md:w-1/2 card-content">
       <h1 class="text-3xl font-bold text-[#2D3648]">Planificación de Comidas Saludables</h1>
       <p class="mt-4 text-lg text-[#5c5c5c]">Aprende a planificar comidas nutritivas y balanceadas para toda la semana.</p>
-      <button class="mt-6">Ver</button>
+      <button class="mt-6" routerLink="/login">Ver</button>
     </div>
   </div>
   <div class="card bg-white shadow-lg overflow-hidden">
     <div class="w-full md:w-1/2 card-content">
       <h1 class="text-3xl font-bold text-[#2D3648]">Ejercicios para Tonificar los Brazos</h1>
       <p class="mt-4 text-lg text-[#5c5c5c]">Rutina de ejercicios en casa para brazos definidos y tonificados.</p>
-      <button class="mt-6">Súmate</button>
+      <button class="mt-6" routerLink="/signin">Súmate</button>
     </div>
     <div class="w-full md:w-1/2 flex justify-center">
       <!-- Flex para centrar la imagen -->

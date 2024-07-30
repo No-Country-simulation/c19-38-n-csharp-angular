@@ -1,1 +1,131 @@
-<p>encuesta4 works!</p>
+<!--NAVBAR-->
+<nav class="bg-white border-b-4 border-[#2D3648] mb-4 p-4">
+    <div class="flex justify-between items-center">
+        <div class="logo bg-[#2D3648] text-white text-2xl py-2 px-12">Logo</div>
+        <div class="tabs flex space-x-11 relative">
+          <a [routerLink]="['/home']" class="tab text-[#2D3648]">Inicio</a>
+            <div class="relative group">
+                <a href="#" class="tab text-[#2D3648] flex items-center relative">
+                    Rutinas <span class="ml-1">&#9660;</span>
+                </a>
+                <div class="submenu absolute hidden group-hover:block bg-white border border-[#2D3648] mt-2 w-48 transition duration-300 ease-in-out">
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Rutinas</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Tips de nutrición</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Entrenando en casa</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Yoga</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Cardio</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">Musculación</a>
+                    <a href="#" class="block px-4 py-2 text-[#2D3648] hover:text-[#00567F]">GAP</a>
+                </div>
+            </div>
+            <a href="#" class="tab text-[#2D3648]">Mis Rutinas</a>
+            <a href="#" class="tab text-[#2D3648]">Comunidad Fitness</a>
+            <a href="#" class="tab text-[#2D3648]">Producto</a>
+        </div>
+        <div class="buttons space-x-2">
+            <a class="btn2 border-2 border-[#2D3648] bg-[#2D3648] text-white py-2 px-3 font-bold" [routerLink]="'/signin'">Sumate</a>
+        </div>
+    </div>
+</nav>
+
+<!--SECTION CARDS-->
+<div class="objectives flex justify-between items-center p-4">
+    <!-- Imagen en el lado izquierdo -->
+    <div class="w-1/2 text-center">
+      <img src="assets/encuesta3.png" alt="Large Image" class="w-[579px] h-[579px] object-contain mx-auto">
+    </div>
+    
+    <!-- Sección de texto y formulario en el lado derecho -->
+    <div class="flex flex-col items-center w-1/2 space-y-4">
+      <h1 class="text-[#2D3648] text-2xl font-bold text-center mb-4">¿En qué áreas te gustaría enfocarte?</h1>
+    
+      <!-- Cuadro de texto -->
+      <textarea placeholder="Cuerpo completo, hombros, pecho, etc.." class="textarea-small"></textarea>
+    
+      <h1 class="text-[#2D3648] text-2xl font-bold text-center mb-4">¿Qué le interesa?</h1>
+  
+      <!-- Sección de checkboxes -->
+      <div class="grid grid-cols-2 gap-4 w-full max-w-xl">
+        <div class="flex items-center">
+          
+          <label for="figura-corp" class="ml-2">Figura corporal</label>
+          <input type="checkbox" id="figura-corp" class="form-checkbox text-[#0091D6]">
+        </div>
+        <div class="flex items-center">
+          <label for="general" class="ml-2">General</label>
+          <input type="checkbox" id="general" class="form-checkbox text-[#0091D6]">
+        </div>
+        <div class="flex items-center">
+            <label for="fuerza" class="ml-2">Fuerza</label>
+            <input type="checkbox" id="fuerza" class="form-checkbox text-[#0091D6]">
+        </div>
+        <div class="flex items-center">
+            <label for="flexibilidad" class="ml-2">Flexibilidad</label>
+            <input type="checkbox" id="flexibilidad" class="form-checkbox text-[#0091D6]">
+        </div>
+        <div class="flex items-center">
+            <label for="quema-grasa" class="ml-2">Quema grasa</label>
+            <input type="checkbox" id="quema-grasa" class="form-checkbox text-[#0091D6]">
+        </div>
+        <div class="flex items-center">
+            <label for="energia" class="ml-2">Energía</label>
+            <input type="checkbox" id="energia" class="form-checkbox text-[#0091D6]">
+        </div>
+        <div class="flex items-center">
+            <label for="agilidad" class="ml-2">Agilidad</label>
+            <input type="checkbox" id="agilidad" class="form-checkbox text-[#0091D6]">
+        </div>
+        <div class="flex items-center">
+            <label for="resistencia" class="ml-2">Resistencia</label>
+            <input type="checkbox" id="resistencia" class="form-checkbox text-[#0091D6]">
+        </div>
+      </div>
+  
+      <!-- Botón -->
+      <button class="btn bg-[#2D3648] text-white py-2 px-6 font-bold rounded-lg mt-4" (click)="navigateTo('encuesta5')">Continuar</button>
+    </div>
+  </div>
+  
+<!--FOOTER-->
+<footer class="bg-[#2D3648] text-white p-4 mt-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+      <div>
+        <div class="text-2xl mb-2">Logo</div>
+      </div>
+      <div>
+        <h4 class="text-xl mb-2">Mapa del sitio</h4>
+        <ul class="space-y-1">
+          <li>About us</li>
+          <li>Services</li>
+          <li>Blog</li>
+          <li>Contact us</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xl mb-2">PRODUCT</h4>
+        <ul class="space-y-1">
+          <li>Pricing</li>
+          <li>Featuring</li>
+          <li>Customers</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xl mb-2">HELP</h4>
+        <ul class="space-y-1">
+          <li>Getting started</li>
+          <li>Network status</li>
+          <li>FAQs</li>
+          <li>Referral program</li>
+        </ul>
+      </div>
+    </div>
+    <div class="flex justify-center mt-4 space-x-4">
+      <i class="fab fa-facebook"></i>
+      <i class="fab fa-twitter"></i>
+      <i class="fab fa-instagram"></i>
+    </div>
+    <div class="text-center mt-4">
+      <p>&#64; 2024 Name of the company</p>
+    </div>
+  </footer>
+  

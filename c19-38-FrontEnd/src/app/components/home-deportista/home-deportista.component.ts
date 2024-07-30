@@ -4,14 +4,13 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-encuesta4',
+  selector: 'app-home-deportista',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink ],
-  templateUrl: './encuesta4.component.html',
-  styleUrl: './encuesta4.component.css'
+  imports: [CommonModule, RouterLink, RouterOutlet],
+  templateUrl: './home-deportista.component.html',
+  styleUrl: './home-deportista.component.css'
 })
-export class Encuesta4Component {
-  
+export class HomeDeportistaComponent {
   constructor(private router: Router) {}
 
   navigateTo(route: string): void {

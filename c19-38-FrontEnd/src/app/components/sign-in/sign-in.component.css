@@ -1,0 +1,277 @@
+/* General styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px; /* Base font size */
+  }
+  
+  /* Navbar styles */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    border-bottom: 4px solid #2D3648;
+  }
+  
+  .logo {
+    margin-left: 3.8rem;
+    background-color: #2D3648;
+    color: #ffffff;
+    font-size: 1.5rem; /* Font size relative to base */
+    padding: 10px 20px;
+    border-radius: 7px;
+  }
+  
+  .tabs {
+    margin-left: 7rem;
+    display: flex;
+    gap: 1rem; /* Responsive gap */
+  }
+  
+  .tab {
+    color: #2D3648;
+    font-size: 1.4rem;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s;
+  }
+  
+  .tab::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 3px;
+    background-color: #2D3648;
+    transform: scaleX(0);
+    transition: transform 0.25s ease-out;
+  }
+  
+  .tab:hover::after,
+  .tab:focus::after {
+    transform: scaleX(1);
+  }
+  
+  .submenu {
+    display: none;
+    position: absolute;
+    z-index: 50;
+    padding-top: 0.5rem;
+  }
+  
+  .group:hover .submenu {
+    display: block;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+  }
+  
+  /* Button styles */
+  .buttons {
+    display: flex;
+    gap: 1rem;
+    margin-right: 7rem;
+  }
+  
+  .btn, .btn2 {
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .btn {
+    border: 2px solid #2D3648;
+    background-color: #ffffff;
+    color: #2D3648;
+  }
+  
+  .btn2 {
+    border: 2px solid #ffffff;
+    background-color: #00567F;
+    color: #ffffff;
+  }
+  
+  /* Section styles */
+  section {
+    background-color: #ffffff;
+    margin: 3rem;
+    padding: 2rem;
+  }
+  
+  section img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .objectives {
+    padding: 3rem;
+  }
+  
+  .objectives h1 {
+    text-align: center;
+    font-size: 3rem;
+  }
+  
+  .objectives p {
+    font-size: 1.25rem;
+  }
+  
+  /* Background styles */
+  #background-section {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  #background-section h1 {
+    margin: 3rem;
+    font-size: 3rem;
+  }
+  
+  #background-section button {
+    margin: 3rem;
+    font-size: 1.875rem;
+    width: 200px;
+  }
+  
+  /* Card styles */
+  .card {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem; /* Increased padding for more separation */
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center elements */
+    max-width: 400px; /* Make the card narrower */
+    margin: 1rem auto; /* Center the card horizontally */
+  }
+  
+  .card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  .card-content {
+    padding: 2rem; /* Adjusted for better spacing */
+    text-align: center;
+  }
+  
+  .card h1 {
+    font-size: 2.5rem;
+    color: #2D3648;
+    margin-bottom: 20px;
+  }
+  
+  .card p {
+    font-size: 1.3rem;
+    color: #000000;
+    margin-bottom: 20px; /* Reduced margin for better spacing */
+  }
+  
+  .card button {
+    background-color: #0091D6;
+    font-size: 1.5rem;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .card button:hover {
+    background-color: #007bb5;
+  }
+  
+  /* Footer styles */
+  footer {
+    background-color: #2D3648;
+    color: #ffffff;
+    padding: 3rem 5rem 4rem;
+  }
+  
+  .footer-title {
+    margin-bottom: 10px;
+  }
+  
+  .footer-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .tabs {
+      display: none; /* Ocultar tabs en pantallas pequeñas */
+    }
+  
+    .buttons {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .logo {
+      margin-bottom: 1rem; /* Espacio entre el logo y los botones */
+    }
+  
+    section {
+      padding: 1rem;
+    }
+  
+    .card {
+      padding: 1rem;
+    }
+  
+    .card img {
+      width: 100%;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .tabs {
+      display: flex;
+      gap: 1rem;
+    }
+  
+    .card {
+      flex-direction: row;
+    }
+  
+    .card img {
+      width: 50%;
+    }
+  
+    .card-content {
+      width: 50%;
+    }
+  }
+  
+/* Password visibility icon */
+.password-container {
+    position: relative;
+  }
+  
+  .password-container input {
+    padding-right: 2.75rem; /* Añade espacio para el ícono */
+  }
+  
+  .password-container .password-toggle {
+    position: absolute;
+    right: 1rem; /* Ajusta según sea necesario */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.25rem; /* Tamaño del ícono */
+    color: #666;
+    cursor: pointer;
+  }
