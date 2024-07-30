@@ -12,7 +12,7 @@ using c19_38_BackEnd.Datos;
 namespace c19_38_BackEnd.Migrations
 {
     [DbContext(typeof(DefaultContext))]
-    [Migration("20240729014616_initDb")]
+    [Migration("20240730020233_initDb")]
     partial class initDb
     {
         /// <inheritdoc />

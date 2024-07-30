@@ -4,5 +4,6 @@
     {
         public const string Aprendiz = "Aprendiz";
         public const string Entrenador = "Entrenador";
+        public const string Administrador = "Administrador";
     }
 }

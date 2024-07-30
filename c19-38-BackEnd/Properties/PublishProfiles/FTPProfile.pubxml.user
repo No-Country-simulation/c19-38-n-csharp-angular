@@ -7,7 +7,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA3bFbbF8soU+RVxF/B6Gd+QAAAAACAAAAAAAQZgAAAAEAACAAAAAyeotNO/WjJY2En1qMM+97fUdRdQ15VugHlQryNm17kQAAAAAOgAAAAAIAACAAAACOdGuYaNsty/YjfdROGg073rm0yIGVrdggdl6dSCY9gSAAAACsLSbpXU43l6824ZNKxF8ElbN7Q+Fkq7jnXNgppGaKNkAAAAB7gs/KoqXn+LxcfMIG+n0vo/IM8UpXU94C09oKYzSYN6Qbww19YM/+dWgZnyvob+dGqAAY3tUnRWdGKJKulqWU</EncryptedPassword>
     <_PublishTargetUrl>ftp://198.37.116.25/www.c19-38-nocountry.somee.com</_PublishTargetUrl>
-    <History>True|2024-07-29T02:02:52.9375276Z;True|2024-07-28T16:25:45.1248285-03:00;False|2024-07-28T16:19:15.0886420-03:00;False|2024-07-28T16:17:35.7607376-03:00;True|2024-07-16T20:24:01.8113493-03:00;True|2024-07-16T19:05:02.3687487-03:00;</History>
+    <History>True|2024-07-30T02:16:58.0921071Z;True|2024-07-28T23:02:52.9375276-03:00;True|2024-07-28T16:25:45.1248285-03:00;False|2024-07-28T16:19:15.0886420-03:00;False|2024-07-28T16:17:35.7607376-03:00;True|2024-07-16T20:24:01.8113493-03:00;True|2024-07-16T19:05:02.3687487-03:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -15,7 +15,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/28/2024 17:41:28</publishTime>
     </File>
     <File Include="appsettings.json">
-      <publishTime>07/28/2024 22:58:08</publishTime>
+      <publishTime>07/29/2024 23:11:59</publishTime>
     </File>
     <File Include="Azure.Core.dll">
       <publishTime>09/07/2023 14:50:30</publishTime>
@@ -24,22 +24,22 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/18/2023 16:59:42</publishTime>
     </File>
     <File Include="c19-38-BackEnd.deps.json">
-      <publishTime>07/28/2024 22:59:25</publishTime>
+      <publishTime>07/29/2024 23:13:44</publishTime>
     </File>
     <File Include="c19-38-BackEnd.dll">
-      <publishTime>07/28/2024 22:59:19</publishTime>
+      <publishTime>07/29/2024 23:13:39</publishTime>
     </File>
     <File Include="c19-38-BackEnd.exe">
-      <publishTime>07/28/2024 22:59:19</publishTime>
+      <publishTime>07/29/2024 23:13:39</publishTime>
     </File>
     <File Include="c19-38-BackEnd.pdb">
-      <publishTime>07/28/2024 22:59:19</publishTime>
+      <publishTime>07/29/2024 23:13:39</publishTime>
     </File>
     <File Include="c19-38-BackEnd.runtimeconfig.json">
       <publishTime>07/28/2024 16:16:09</publishTime>
     </File>
     <File Include="c19-38-BackEnd.xml">
-      <publishTime>07/28/2024 22:59:18</publishTime>
+      <publishTime>07/29/2024 23:13:38</publishTime>
     </File>
     <File Include="CloudinaryDotNet.dll">
       <publishTime>03/16/2024 14:43:28</publishTime>
@@ -207,7 +207,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/22/2021 20:49:44</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>07/28/2024 22:59:25</publishTime>
+      <publishTime>07/29/2024 23:13:44</publishTime>
     </File>
   </ItemGroup>
 </Project>

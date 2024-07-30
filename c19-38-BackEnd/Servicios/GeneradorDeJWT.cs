@@ -20,7 +20,7 @@ namespace c19_38_BackEnd.Servicios
             };
             if(!rol.IsNullOrEmpty())
             {
-                myListClaims.Add(new Claim("rol", rol));
+                myListClaims.Add(new Claim(ClaimTypes.Role,rol));
             }
             return myListClaims;
         }

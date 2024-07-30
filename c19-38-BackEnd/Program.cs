@@ -7,6 +7,7 @@ using c19_38_BackEnd.Servicios;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -109,6 +110,7 @@ namespace c19_38_BackEnd
             {
                 options.AddPolicy(Roles.Aprendiz, policy => policy.RequireRole(Roles.Aprendiz));
                 options.AddPolicy(Roles.Entrenador, policy => policy.RequireRole(Roles.Entrenador));
+                options.AddPolicy(Roles.Administrador, policy => policy.RequireRole(Roles.Administrador));
             });
 
             // Configurar Swagger para la documentación de la API.
@@ -178,6 +180,7 @@ namespace c19_38_BackEnd
 
             //Crea los roles en caso de que no existan
             await CrearRoles(app);
+            await CrearUsuarioAdministrador(app);
 
             app.UseSwagger();
             app.UseSwaggerUI();
@@ -198,7 +201,7 @@ namespace c19_38_BackEnd
             using (var scope = app.Services.CreateScope())
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
-                string[] roles = { Roles.Entrenador, Roles.Aprendiz };
+                string[] roles = { Roles.Entrenador, Roles.Aprendiz,Roles.Administrador};
                 IdentityResult roleResult;
 
                 foreach (var rol in roles)
@@ -208,6 +211,41 @@ namespace c19_38_BackEnd
                     {
                         // Crear los roles y guardarlos en la base de datos
                         roleResult = await roleManager.CreateAsync(new IdentityRole<int>(rol));
+                    }
+                }
+            }
+        }
+
+        private static async Task CrearUsuarioAdministrador(WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Usuario>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+
+                var adminEmail = "admin@example.com";
+                var adminPassword = "Admin@123";
+
+                if (await userManager.FindByEmailAsync(adminEmail) == null)
+                {
+                    var adminUser = new Usuario
+                    {
+                        UserName = adminEmail,
+                        Email = adminEmail,
+                        Nombre = "Admin",
+                        Apellido = "User",
+                        Genero = Genero.Masculino,
+                        FechaDeNac = new DateTime(1990, 1, 1),
+                        Peso = 70.0f,
+                        Altura = 170.0f,
+                        MediaUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQH23wl-q67cob4TWDwiHMie9RaSfX5A7Vm3tvs39u2KQ&s",
+                        Disciplina = Disciplina.Musculacion
+                    };
+                    var result = await userManager.CreateAsync(adminUser, adminPassword);
+
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(adminUser, Roles.Administrador);
                     }
                 }
             }
