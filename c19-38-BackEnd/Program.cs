@@ -1,6 +1,9 @@
 using c19_38_BackEnd.Configuracion;
 using c19_38_BackEnd.Datos;
+using c19_38_BackEnd.Interfaces;
 using c19_38_BackEnd.Modelos;
+using c19_38_BackEnd.Repositorio;
+using c19_38_BackEnd.Servicios;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -22,13 +25,12 @@ namespace c19_38_BackEnd
         //Contraseña Somee: sNvsd9t=SV}hV!L
 
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            
-
+ 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -39,15 +41,31 @@ namespace c19_38_BackEnd
                 configuration.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
             });
 
-
+            // Configurar Identity para el manejo de usuarios y roles, tambien se configura para los requerimientos de la contraseña
             builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
             {
-
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<DefaultContext>();
 
+            // Añadir servicios Scoped para el manejo de usuarios, inicio de sesión y roles.
             builder.Services.AddScoped<UserManager<Usuario>>();
             builder.Services.AddScoped<SignInManager<Usuario>>();
             builder.Services.AddScoped<RoleManager<IdentityRole<int>>>();
+            builder.Services.AddScoped<IRepository<Serie>,Repository<Serie>>();
+            builder.Services.AddScoped<IRepository<Ejercicio>, Repository<Ejercicio>>();
+            builder.Services.AddScoped<IRepository<Usuario>, Repository<Usuario>>();
+            builder.Services.AddScoped<IRepository<Post>, Repository<Post>>();
+            builder.Services.AddScoped<IRepository<PlanDeEntrenamiento>, Repository<PlanDeEntrenamiento>>();
+            builder.Services.AddScoped<IRepository<HistorialRendimiento>, Repository<HistorialRendimiento>>();
+            builder.Services.AddScoped<IRepository<Comentario>, Repository<Comentario>>();
+            builder.Services.AddScoped<IRepository<BibliotecaPlanUsuario>, Repository<BibliotecaPlanUsuario>>();
+            builder.Services.AddScoped<IRepository<DescripcionObjetivos>, Repository<DescripcionObjetivos>>();
+            builder.Services.AddScoped<ICloudMediaService, CloudMediaService>();
+            
 
             //Cors generico (temporalmente) para el consumo en el front, proximamente se reconfigurara especificamente para el proyecto en despliegue de Angular
             builder.Services.AddCors(corsConfiguration =>
@@ -60,6 +78,7 @@ namespace c19_38_BackEnd
                 });
             });
 
+            // Configurar JWT settings.
             var bindJwtSettings = new JwtSettings();
             //Obtiene la configuracion almacenada en appSettings.json de la key "JwtSettings":
             builder.Configuration.Bind("JwtSettings", bindJwtSettings);
@@ -67,7 +86,11 @@ namespace c19_38_BackEnd
             var key = Encoding.UTF8.GetBytes(bindJwtSettings.IssuerSigningKey);
 
             //Añado la validacion del token jwt para cada request
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            builder.Services.AddAuthentication(options=>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(config =>
                 {
                     config.TokenValidationParameters = new TokenValidationParameters
@@ -81,6 +104,14 @@ namespace c19_38_BackEnd
                     };
                 });
 
+            // Configurar políticas de autorización.
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Roles.Aprendiz, policy => policy.RequireRole(Roles.Aprendiz));
+                options.AddPolicy(Roles.Entrenador, policy => policy.RequireRole(Roles.Entrenador));
+            });
+
+            // Configurar Swagger para la documentación de la API.
             builder.Services.AddSwaggerGen(swaggerConfiguration=>
             {
                 //Encabezado de la API
@@ -121,8 +152,20 @@ namespace c19_38_BackEnd
                 swaggerConfiguration.IncludeXmlComments(xmlPath);
             });
 
+            // Añadir validaciones con FluentValidation.
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             builder.Services.AddFluentValidationAutoValidation();
+
+
+            // Configurar JWT settings.
+            var cloudSettings = new CloudinarySettings();
+            //Obtiene la configuracion almacenada en appSettings.json de la key "JwtSettings":
+            builder.Configuration.Bind("CloudinarySettings", cloudSettings);
+
+            builder.Services.AddSingleton(bindJwtSettings);
+            builder.Services.AddSingleton(cloudSettings);
+
+
 
             var app = builder.Build();
 
@@ -133,18 +176,41 @@ namespace c19_38_BackEnd
                 app.UseSwaggerUI();
             }
 
+            //Crea los roles en caso de que no existan
+            await CrearRoles(app);
+
             app.UseSwagger();
             app.UseSwaggerUI();
 
             app.UseCors("Cors policy for Front End Angular");
             app.UseHttpsRedirection();
-            //app.UseAuthentication();
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static async Task CrearRoles(WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+                string[] roles = { Roles.Entrenador, Roles.Aprendiz };
+                IdentityResult roleResult;
+
+                foreach (var rol in roles)
+                {
+                    var roleExist = await roleManager.RoleExistsAsync(rol);
+                    if (!roleExist)
+                    {
+                        // Crear los roles y guardarlos en la base de datos
+                        roleResult = await roleManager.CreateAsync(new IdentityRole<int>(rol));
+                    }
+                }
+            }
         }
     }
 }
